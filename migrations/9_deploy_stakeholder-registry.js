@@ -6,7 +6,7 @@ var contractAddressList = require('./contractAddress/contractAddress.js');
 var tokenAddressList = require('./tokenAddress/tokenAddress.js');
 var walletAddressList = require('./walletAddress/walletAddress.js');
 
-const _erc20 = tokenAddressList["Ropsten"]["DAI"];     // DAI address on Ropsten
+const _erc20 = tokenAddressList["Rinkeby"]["DAI"];     // DAI address on Rinkeby
 
 const depositedAmount = web3.utils.toWei("0.15");    // 0.15 DAI which is deposited in deployed contract. 
 

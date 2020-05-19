@@ -131,7 +131,7 @@ export default class UniswapAaveNYBW extends Component {
 
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
-            let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAI"]; //@dev - DAI（on Ropsten）
+            let DAI_ADDRESS = tokenAddressList["Rinkeby"]["DAI"]; //@dev - DAI（on Rinkeby）
             instanceDai = new web3.eth.Contract(
               Dai.abi,
               DAI_ADDRESS,
@@ -140,7 +140,7 @@ export default class UniswapAaveNYBW extends Component {
 
             //@dev - Create instance of BokkyPooBahsDateTimeContract.sol
             let instanceBokkyPooBahsDateTimeContract = null;
-            let BOKKYPOOBAHS_DATETIME_CONTRACT_ADDRESS = contractAddressList["Kovan"]["BokkyPooBahsDateTimeLibrary"]["BokkyPooBahsDateTimeContract"];  // IdleDAI (on Kovan)
+            let BOKKYPOOBAHS_DATETIME_CONTRACT_ADDRESS = contractAddressList["Kovan"]["BokkyPooBahsDateTimeLibrary"]["BokkyPooBahsDateTimeContract"];
             instanceBokkyPooBahsDateTimeContract = new web3.eth.Contract(
               BokkyPooBahsDateTimeContract.abi,
               BOKKYPOOBAHS_DATETIME_CONTRACT_ADDRESS,
