@@ -10,7 +10,8 @@ export const tokenAddressList = {
         "DAI": "0xaD6D458402F60fD3Bd25163575031ACDce07538D",    // DAI address on Ropsten   
     },
     "Rinkeby": {
-        "DAI": "",    // DAI address on Rinkeby  
-        "cDAI": "",   // cDAI address on Rinkeby  
+        "DAI": "0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa",    // DAI address on Rinkeby  
+        "cDAI": "",                                             // cDAI address on Rinkeby    
+        "BAT": "0xbF7A7169562078c96f0eC1A8aFD6aE50f12e5A99"     // BAT address on Rinkeby（Borrowed via Compound）
     },
 }
