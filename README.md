@@ -68,14 +68,23 @@ http://127.0.0.1:3000/pooltogether-nybw-hack-2020
 ***
 
 ## 【References】
-- [Uniswap]：  
+- [Uniswap-v2]：  
   - Bounty   
     - https://gitcoin.co/issue/aave/aave-gitcoin-hackaton-2019/8/4326  
     - https://gitcoin.co/issue/Uniswap/uniswap-v2-core/76/4324  
 
-  - Repos    
-    
+  - Repos
+    - uniswap-v2-core  
+      https://github.com/Uniswap/uniswap-v2-core
+    - uniswap-v2-periphery  
+      https://github.com/Uniswap/uniswap-v2-periphery
+    - uniswap-lib  
+      https://github.com/Uniswap/uniswap-lib 
 
   - Doc  
     - Uniswap-v2 / Factory Contract（Crete Pare）  
       https://uniswap.org/docs/v2/smart-contracts/factory/
+
+  - Article
+    - Uniswap V2 Mainnet Launch
+      https://uniswap.org/blog/launch-uniswap-v2/
