@@ -31,6 +31,7 @@ export default class UniswapAaveNYBW extends Component {
         this.createUniToken = this.createUniToken.bind(this);
 
         /////// Getter Functions
+        this._getTotalSupplyOfUniToken = this._getTotalSupplyOfUniToken.bind(this);
         this._balanceOfContract = this._balanceOfContract.bind(this);
 
         /////// Test Functions
@@ -54,6 +55,16 @@ export default class UniswapAaveNYBW extends Component {
     /***
      * @notice - Getter function
      **/
+    _getTotalSupplyOfUniToken = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
+
+        let res = await uniswap_aave_nybw.methods.getTotalSupplyOfUniToken().call();
+        console.log('=== getTotalSupplyOfUniToken() ===\n', res);
+    }
+
+
     _balanceOfContract = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
@@ -222,6 +233,8 @@ export default class UniswapAaveNYBW extends Component {
                             <h4>Uniswap Aave NYBW Hack 2020</h4> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.createUniToken}> Create UNItoken </Button> <br />
+
+                            <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._getTotalSupplyOfUniToken}> Get TotalSupply Of UniToken </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._balanceOfContract}> Balance of contract </Button> <br />
                         </Card>
