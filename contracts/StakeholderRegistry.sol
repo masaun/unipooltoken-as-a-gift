@@ -40,6 +40,12 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         emit _PairCreated(_tokenA, _tokenB, _pair);   
     }
 
+    function mintUniToken(address _pair, address _to) public {
+        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
+        uint _liquidity = uniswapV2Pair.mint(_to);
+        emit MintUniToken(_pair, _to, _liquidity);
+    }
+
     function _getPair(address _tokenA, address _tokenB) public view returns (address _pair) {
         address _pair = uniswapV2Factory.getPair(_tokenA, _tokenB);
         return _pair;
@@ -54,9 +60,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     }
 
     function getTotalSupplyOfUniToken(address _pair) public view returns (uint _totalSupplyOfUniToken) {
-        //IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
         IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
-        //uint _totalSupplyOfUniToken = uniswapV2Pair.totalSupply();
         uint _totalSupplyOfUniToken = uniswapV2ERC20.totalSupply();
         return _totalSupplyOfUniToken;  
     }

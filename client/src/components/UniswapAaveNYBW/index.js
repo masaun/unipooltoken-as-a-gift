@@ -29,6 +29,7 @@ export default class UniswapAaveNYBW extends Component {
 
         /////// Uniswap-v2
         this.createUniToken = this.createUniToken.bind(this);
+        this.mintUniToken = this.mintUniToken.bind(this);
 
         /////// Getter Functions
         this.getPair = this.getPair.bind(this);
@@ -46,12 +47,23 @@ export default class UniswapAaveNYBW extends Component {
     createUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
-        //const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
+        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
+        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
         const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
         console.log('=== createUniToken() ===\n', res);
+    }
+
+    mintUniToken = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";    // Pair of BAT and DAI on Rinkeby 
+        //const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
+        const _to = walletAddressList["WalletAddress1"];
+
+        let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
+        console.log('=== mintUniToken() ===\n', res);
     }
 
 
@@ -67,13 +79,12 @@ export default class UniswapAaveNYBW extends Component {
 
         let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
         console.log('=== _getPair() ===\n', res);
-
     }
 
     getUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";
+        const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";    // Pair of BAT and DAI on Rinkeby 
         //const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
 
         let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
@@ -259,6 +270,8 @@ export default class UniswapAaveNYBW extends Component {
                             <h4>Uniswap Aave NYBW Hack 2020</h4> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.createUniToken}> Create UNItoken </Button> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.mintUniToken}> Mint UNItoken </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getPair}> Get Pair </Button> <br />
 
