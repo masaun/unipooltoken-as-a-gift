@@ -13,6 +13,7 @@ import "./storage/McConstants.sol";
 
 // Uniswap-v2
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2ERC20.sol";
 
 
@@ -40,8 +41,10 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     }
     
     function getTotalSupplyOfUniToken(address _pair) public view returns (uint _totalSupplyOfUniToken) {
-        IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
-        uint _totalSupplyOfUniToken = uniswapV2ERC20.totalSupply();
+        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
+        //IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
+        uint _totalSupplyOfUniToken = uniswapV2Pair.totalSupply();
+        //uint _totalSupplyOfUniToken = uniswapV2ERC20.totalSupply();
         return _totalSupplyOfUniToken;  
     }
 
