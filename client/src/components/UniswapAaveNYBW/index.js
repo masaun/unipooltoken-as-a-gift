@@ -27,6 +27,9 @@ export default class UniswapAaveNYBW extends Component {
             route: window.location.pathname.replace("/", "")
         };
 
+        /////// Uniswap-v2
+        this.createUniToken = this.createUniToken.bind(this);
+
         /////// Getter Functions
         this._balanceOfContract = this._balanceOfContract.bind(this);
 
@@ -203,6 +206,8 @@ export default class UniswapAaveNYBW extends Component {
                               borderColor={"#E8E8E8"}
                         >
                             <h4>Uniswap Aave NYBW Hack 2020</h4> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.createUniToken}> Create UNItoken </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._balanceOfContract}> Balance of contract </Button> <br />
                         </Card>

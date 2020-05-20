@@ -11,6 +11,9 @@ import "./lib/OwnableOriginal.sol";
 import "./storage/McStorage.sol";
 import "./storage/McConstants.sol";
 
+// Uniswap-v2
+import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+
 
 /***
  * @notice - This contract is that ...
@@ -19,13 +22,27 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     using SafeMath for uint;
 
     IERC20 public dai;
+    IUniswapV2Factory public uniswapV2Factory;
 
-    constructor(address _erc20) public {
+    constructor(address _erc20, address _uniswapV2Factory) public {
         dai = IERC20(_erc20);
+        uniswapV2Factory = IUniswapV2Factory(_uniswapV2Factory);
     }
 
+
     /***
-     * @dev - Get balance
+     * @notice - Uniswap-v2 / Create Pair (=Create UNItoken)
+     **/
+    function createUniToken(address _tokenA, address _tokenB) public returns (address _pair) {
+        address _pair = uniswapV2Factory.createPair(_tokenA, _tokenB);
+        return _pair;
+    }
+    
+
+
+
+    /***
+     * @notice - Get balance
      **/
     function balanceOfContract() public view returns (uint balanceOfContract_DAI, uint balanceOfContract_ETH) {
         return (dai.balanceOf(address(this)), address(this).balance);
