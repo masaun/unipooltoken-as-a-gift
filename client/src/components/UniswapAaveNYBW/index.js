@@ -70,7 +70,7 @@ export default class UniswapAaveNYBW extends Component {
 
     }
 
-    _getUniToken = async () => {
+    getUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
         const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";
@@ -262,7 +262,7 @@ export default class UniswapAaveNYBW extends Component {
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getPair}> Get Pair </Button> <br />
 
-                            <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._getUniToken}> Get UniToken </Button> <br />
+                            <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getUniToken}> Get UniToken </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._getTotalSupplyOfUniToken}> Get TotalSupply Of UniToken </Button> <br />
 
