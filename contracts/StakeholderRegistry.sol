@@ -33,9 +33,9 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     /***
      * @notice - Uniswap-v2 / Create Pair (=Create UNItoken)
      **/
-    function createUniToken(address _tokenA, address _tokenB) public returns (address _pair) {
+    function createUniToken(address _tokenA, address _tokenB) public {
         address _pair = uniswapV2Factory.createPair(_tokenA, _tokenB);
-        return _pair;
+        emit _PairCreated(_tokenA, _tokenB, _pair);   
     }
     
 

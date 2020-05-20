@@ -38,17 +38,31 @@ export default class UniswapAaveNYBW extends Component {
     }
 
     /***
-     * @dev - Getter function
+     * @notice - Uniswap-v2
+     **/
+    createUniToken = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
+        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+
+        let res = await uniswap_aave_nybw.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
+        console.log('=== createUniToken() ===\n', res);
+    }
+
+
+    /***
+     * @notice - Getter function
      **/
     _balanceOfContract = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw, pool_mock } = this.state;
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
         let res1 = await uniswap_aave_nybw.methods.balanceOfContract().call();
         console.log('=== balanceOfContract() ===\n', res1);
     }
 
     /***
-     * @dev - Test Functions
+     * @notice - Test Functions
      **/
     timestampFromDate = async () => {
         const { accounts, web3, bokkypoobahs_datetime_contract } = this.state;
