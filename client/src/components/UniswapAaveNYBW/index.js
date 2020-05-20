@@ -27,7 +27,13 @@ export default class UniswapAaveNYBW extends Component {
             route: window.location.pathname.replace("/", "")
         };
 
+        /////// Uniswap-v2
+        this.createUniToken = this.createUniToken.bind(this);
+
         /////// Getter Functions
+        this.getPair = this.getPair.bind(this);
+        this.getUniToken = this.getUniToken.bind(this);
+        this._getTotalSupplyOfUniToken = this._getTotalSupplyOfUniToken.bind(this);
         this._balanceOfContract = this._balanceOfContract.bind(this);
 
         /////// Test Functions
@@ -35,17 +41,65 @@ export default class UniswapAaveNYBW extends Component {
     }
 
     /***
-     * @dev - Getter function
+     * @notice - Uniswap-v2
      **/
+    createUniToken = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
+        //const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
+        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+
+        let res = await uniswap_aave_nybw.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
+        console.log('=== createUniToken() ===\n', res);
+    }
+
+
+    /***
+     * @notice - Getter function
+     **/
+    getPair = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
+        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
+        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+
+        let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
+        console.log('=== _getPair() ===\n', res);
+
+    }
+
+    getUniToken = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";
+        //const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
+
+        let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
+        console.log('=== getUniToken() ===\n', res);
+    }
+
+    _getTotalSupplyOfUniToken = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";
+        //const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
+
+        let res = await uniswap_aave_nybw.methods.getTotalSupplyOfUniToken(_pair).call();
+        console.log('=== getTotalSupplyOfUniToken() ===\n', res);
+    }
+
+
     _balanceOfContract = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw, pool_mock } = this.state;
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
         let res1 = await uniswap_aave_nybw.methods.balanceOfContract().call();
         console.log('=== balanceOfContract() ===\n', res1);
     }
 
     /***
-     * @dev - Test Functions
+     * @notice - Test Functions
      **/
     timestampFromDate = async () => {
         const { accounts, web3, bokkypoobahs_datetime_contract } = this.state;
@@ -203,6 +257,14 @@ export default class UniswapAaveNYBW extends Component {
                               borderColor={"#E8E8E8"}
                         >
                             <h4>Uniswap Aave NYBW Hack 2020</h4> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.createUniToken}> Create UNItoken </Button> <br />
+
+                            <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getPair}> Get Pair </Button> <br />
+
+                            <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getUniToken}> Get UniToken </Button> <br />
+
+                            <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._getTotalSupplyOfUniToken}> Get TotalSupply Of UniToken </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._balanceOfContract}> Balance of contract </Button> <br />
                         </Card>

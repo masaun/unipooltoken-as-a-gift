@@ -11,6 +11,11 @@ import "./lib/OwnableOriginal.sol";
 import "./storage/McStorage.sol";
 import "./storage/McConstants.sol";
 
+// Uniswap-v2
+import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol";
+import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol";
+import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2ERC20.sol";
+
 
 /***
  * @notice - This contract is that ...
@@ -19,13 +24,47 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     using SafeMath for uint;
 
     IERC20 public dai;
+    IUniswapV2Factory public uniswapV2Factory;
 
-    constructor(address _erc20) public {
+    constructor(address _erc20, address _uniswapV2Factory) public {
         dai = IERC20(_erc20);
+        uniswapV2Factory = IUniswapV2Factory(_uniswapV2Factory);
     }
 
+
     /***
-     * @dev - Get balance
+     * @notice - Uniswap-v2 / Create Pair (=Create UNItoken)
+     **/
+    function createUniToken(address _tokenA, address _tokenB) public {
+        address _pair = uniswapV2Factory.createPair(_tokenA, _tokenB);
+        emit _PairCreated(_tokenA, _tokenB, _pair);   
+    }
+
+    function _getPair(address _tokenA, address _tokenB) public view returns (address _pair) {
+        address _pair = uniswapV2Factory.getPair(_tokenA, _tokenB);
+        return _pair;
+    }
+
+    function getUniToken(address _pair) public view returns (string memory _name, string memory _symbol, uint _decimals) {
+        IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
+        string memory _name = uniswapV2ERC20.name();
+        string memory _symbol = uniswapV2ERC20.symbol();
+        uint _decimals = uniswapV2ERC20.decimals();
+        return (_name, _symbol, _decimals);
+    }
+
+    function getTotalSupplyOfUniToken(address _pair) public view returns (uint _totalSupplyOfUniToken) {
+        //IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
+        IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
+        //uint _totalSupplyOfUniToken = uniswapV2Pair.totalSupply();
+        uint _totalSupplyOfUniToken = uniswapV2ERC20.totalSupply();
+        return _totalSupplyOfUniToken;  
+    }
+
+
+
+    /***
+     * @notice - Get balance
      **/
     function balanceOfContract() public view returns (uint balanceOfContract_DAI, uint balanceOfContract_ETH) {
         return (dai.balanceOf(address(this)), address(this).balance);
