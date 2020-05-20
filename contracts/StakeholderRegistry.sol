@@ -39,7 +39,12 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         address _pair = uniswapV2Factory.createPair(_tokenA, _tokenB);
         emit _PairCreated(_tokenA, _tokenB, _pair);   
     }
-    
+
+    function _getPair(address _tokenA, address _tokenB) public view returns (address _pair) {
+        address _pair = uniswapV2Factory.getPair(_tokenA, _tokenB);
+        return _pair;
+    }
+
     function getTotalSupplyOfUniToken(address _pair) public view returns (uint _totalSupplyOfUniToken) {
         IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
         //IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
