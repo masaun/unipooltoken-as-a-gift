@@ -57,7 +57,7 @@ export default class UniswapAaveNYBW extends Component {
     }
 
     addLiquidity = async () => {
-        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
+        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS, UNISWAP_V2_ROUTOR_01_ADDRESS } = this.state;
 
         //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
         const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
@@ -69,8 +69,8 @@ export default class UniswapAaveNYBW extends Component {
         const _to = walletAddressList["WalletAddress1"];
         const _deadline = 1590116732; // (GMT): Friday, May 22, 2020 3:05:32 AM 
 
-        let approved1 = await zrx.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amountADesired).send({ from: accounts[0] });
-        let approved2 = await bat.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amountBDesired).send({ from: accounts[0] });
+        let approved1 = await zrx.methods.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountADesired).send({ from: accounts[0] });
+        let approved2 = await bat.methods.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountBDesired).send({ from: accounts[0] });
         let res = await uniswap_aave_nybw.methods._addLiquidity(_tokenA,
                                                                 _tokenB,
                                                                 _amountADesired,
@@ -223,6 +223,9 @@ export default class UniswapAaveNYBW extends Component {
               }
             }
 
+            //@notice - IUniswapV2Router01.sol
+            const UNISWAP_V2_ROUTOR_01_ADDRESS = contractAddressList["Rinkeby"]["Uniswap"]["UniswapV2Router01"];
+
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
             let DAI_ADDRESS = tokenAddressList["Rinkeby"]["DAI"]; //@dev - DAI（on Rinkeby）
@@ -278,6 +281,7 @@ export default class UniswapAaveNYBW extends Component {
                 bat: instanceBAT,
                 bokkypoobahs_datetime_contract: instanceBokkyPooBahsDateTimeContract,
                 UNISWAP_AAVE_NYBW_ADDRESS: UNISWAP_AAVE_NYBW_ADDRESS,
+                UNISWAP_V2_ROUTOR_01_ADDRESS: UNISWAP_V2_ROUTOR_01_ADDRESS,
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
                 this.refreshValues(
