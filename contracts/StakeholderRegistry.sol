@@ -43,6 +43,32 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         emit _PairCreated(_tokenA, _tokenB, _pair);   
     }
 
+    function _addLiquidity(
+        address _tokenA,
+        address _tokenB,
+        uint _amountADesired,
+        uint _amountBDesired,
+        uint _amountAMin,
+        uint _amountBMin,
+        address _to,
+        uint _deadline
+    ) public {
+        uint _amountA; 
+        uint _amountB;
+        uint _liquidity;
+
+        (_amountA, _amountB, _liquidity) = uniswapV2Router01.addLiquidity(_tokenA,
+                                                                          _tokenB,
+                                                                          _amountADesired,
+                                                                          _amountBDesired,
+                                                                          _amountAMin,
+                                                                          _amountBMin,
+                                                                          _to,
+                                                                          _deadline);
+        emit _AddLiquidity(_amountA, _amountB, _liquidity);
+    }
+    
+
     function mintUniToken(address _pair, address _to) public {
         /// Mint UniToken
         IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
