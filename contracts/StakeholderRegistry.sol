@@ -15,6 +15,7 @@ import "./storage/McConstants.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2ERC20.sol";
+//import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
 
 /***
@@ -25,10 +26,12 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
 
     IERC20 public dai;
     IUniswapV2Factory public uniswapV2Factory;
+    IUniswapV2Router01 public uniswapV2Router01;
 
-    constructor(address _erc20, address _uniswapV2Factory) public {
+    constructor(address _erc20, address _uniswapV2Factory, address _uniswapV2Router01) public {
         dai = IERC20(_erc20);
         uniswapV2Factory = IUniswapV2Factory(_uniswapV2Factory);
+        //uniswapV2Router01 = IUniswapV2Router01(_uniswapV2Router01);
     }
 
 
@@ -41,6 +44,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     }
 
     function mintUniToken(address _pair, address _to) public {
+        /// Mint UniToken
         IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
         uint _liquidity = uniswapV2Pair.mint(_to);
         emit MintUniToken(_pair, _to, _liquidity);
