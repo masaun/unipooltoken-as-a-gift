@@ -29,6 +29,7 @@ export default class UniswapAaveNYBW extends Component {
 
         /////// Uniswap-v2
         this.createUniToken = this.createUniToken.bind(this);
+        this.addLiquidity = this.addLiquidity.bind(this);
         this.mintUniToken = this.mintUniToken.bind(this);
 
         /////// Getter Functions
@@ -53,6 +54,29 @@ export default class UniswapAaveNYBW extends Component {
 
         let res = await uniswap_aave_nybw.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
         console.log('=== createUniToken() ===\n', res);
+    }
+
+    addLiquidity = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
+        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+        const _amountADesired = 1;
+        const _amountBDesired = 1;
+        const _amountAMin = 0;
+        const _amountBMin = 0;
+        const _to = walletAddressList["WalletAddress1"];
+        const _deadline = 1590116732; // (GMT): Friday, May 22, 2020 3:05:32 AM 
+
+        let res = await uniswap_aave_nybw.methods._addLiquidity(_tokenA,
+                                                                _tokenB,
+                                                                _amountADesired,
+                                                                _amountBDesired,
+                                                                _amountAMin,
+                                                                _amountBMin,
+                                                                _to,
+                                                                _deadline).send({ from: accounts[0] });
+        console.log('=== _addLiquidity() ===\n', res);
     }
 
     mintUniToken = async () => {
@@ -270,6 +294,8 @@ export default class UniswapAaveNYBW extends Component {
                             <h4>Uniswap Aave NYBW Hack 2020</h4> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.createUniToken}> Create UNItoken </Button> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.addLiquidity}> Add Liquidity </Button> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.mintUniToken}> Mint UNItoken </Button> <br />
 
