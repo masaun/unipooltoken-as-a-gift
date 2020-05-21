@@ -25,13 +25,21 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     using SafeMath for uint;
 
     IERC20 public dai;
+    IERC20 public zrx;
+    IERC20 public bat;    
     IUniswapV2Factory public uniswapV2Factory;
     IUniswapV2Router01 public uniswapV2Router01;
 
-    constructor(address _erc20, address _uniswapV2Factory, address _uniswapV2Router01) public {
-        dai = IERC20(_erc20);
+    address UNISWAP_V2_ROUTOR_01_ADDRESS;
+
+    constructor(address daiAddress, address zrxAddress, address batAddress, address _uniswapV2Factory, address _uniswapV2Router01) public {
+        dai = IERC20(daiAddress);
+        zrx = IERC20(zrxAddress);
+        bat = IERC20(batAddress);
         uniswapV2Factory = IUniswapV2Factory(_uniswapV2Factory);
         uniswapV2Router01 = IUniswapV2Router01(_uniswapV2Router01);
+
+        UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
     }
 
 
@@ -57,6 +65,11 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         uint _amountB;
         uint _liquidity;
 
+        /// Approve tokenA and tokenB for UniswapV2Router01.sol address
+        zrx.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountADesired);
+        bat.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountBDesired);
+
+        /// Add liquidity
         (_amountA, _amountB, _liquidity) = uniswapV2Router01.addLiquidity(_tokenA,
                                                                           _tokenB,
                                                                           _amountADesired,
