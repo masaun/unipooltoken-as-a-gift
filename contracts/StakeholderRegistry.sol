@@ -15,7 +15,7 @@ import "./storage/McConstants.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2ERC20.sol";
-//import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
+import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
 
 /***
@@ -31,7 +31,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     constructor(address _erc20, address _uniswapV2Factory, address _uniswapV2Router01) public {
         dai = IERC20(_erc20);
         uniswapV2Factory = IUniswapV2Factory(_uniswapV2Factory);
-        //uniswapV2Router01 = IUniswapV2Router01(_uniswapV2Router01);
+        uniswapV2Router01 = IUniswapV2Router01(_uniswapV2Router01);
     }
 
 

@@ -8,6 +8,7 @@ var walletAddressList = require('./walletAddress/walletAddress.js');
 
 const _erc20 = tokenAddressList["Rinkeby"]["DAI"];     // DAI address on Rinkeby
 const _uniswapV2Factory = contractAddressList["Rinkeby"]["Uniswap"]["UniswapV2Factory"];
+const _uniswapV2Router01 = contractAddressList["Rinkeby"]["Uniswap"]["UniswapV2Router01"];
 
 const depositedAmount = web3.utils.toWei("0.15");    // 0.15 DAI which is deposited in deployed contract. 
 
@@ -15,7 +16,7 @@ module.exports = async function(deployer, network, accounts) {
     // Initialize owner address if you want to transfer ownership of contract to some other address
     let ownerAddress = walletAddressList["WalletAddress1"];
 
-    await deployer.deploy(StakeholderRegistry, _erc20, _uniswapV2Factory).then(async function(stakeholderRegistry) {
+    await deployer.deploy(StakeholderRegistry, _erc20, _uniswapV2Factory, _uniswapV2Router01).then(async function(stakeholderRegistry) {
         if(ownerAddress && ownerAddress!="") {
             console.log(`=== Transfering ownerhip to address ${ownerAddress} ===`)
             await stakeholderRegistry.transferOwnership(ownerAddress);
