@@ -57,18 +57,20 @@ export default class UniswapAaveNYBW extends Component {
     }
 
     addLiquidity = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
 
         //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
         const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
         const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
         const _amountADesired = web3.utils.toWei('1', 'ether');
-        const _amountBDesired = web3.utils.toWei('2', 'ether');
+        const _amountBDesired = web3.utils.toWei('4', 'ether');
         const _amountAMin = 0;
         const _amountBMin = 0;
         const _to = walletAddressList["WalletAddress1"];
         const _deadline = 1590116732; // (GMT): Friday, May 22, 2020 3:05:32 AM 
 
+        let approved1 = await zrx.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amountADesired);
+        let approved2 = await bat.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amountBDesired);
         let res = await uniswap_aave_nybw.methods._addLiquidity(_tokenA,
                                                                 _tokenB,
                                                                 _amountADesired,
@@ -172,10 +174,12 @@ export default class UniswapAaveNYBW extends Component {
         const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
      
         let UniswapAaveNYBW = {};
+        let Erc20 = {};
         let Dai = {};
         let BokkyPooBahsDateTimeContract = {};
         try {
           UniswapAaveNYBW = require("../../../../build/contracts/StakeholderRegistry.json");  // Load artifact-file of StakeholderRegistry
+          Erc20 = require("../../../../build/contracts/IERC20.json");
           Dai = require("../../../../build/contracts/IERC20.json");               //@dev - DAI（Underlying asset）
           BokkyPooBahsDateTimeContract = require("../../../../build/contracts/BokkyPooBahsDateTimeContract.json");   //@dev - BokkyPooBahsDateTimeContract.sol (for calculate timestamp)
         } catch (e) {
@@ -228,6 +232,24 @@ export default class UniswapAaveNYBW extends Component {
             );
             console.log('=== instanceDai ===', instanceDai);
 
+            //@dev - Create instance of ZRX
+            let instanceZRX = null;
+            let ZRX_ADDRESS = tokenAddressList["Rinkeby"]["ZRX"]; //@dev - ZRX（on Rinkeby）
+            instanceZRX = new web3.eth.Contract(
+              Erc20.abi,
+              ZRX_ADDRESS,
+            );
+            console.log('=== instanceZRX ===', instanceZRX);
+
+            //@dev - Create instance of BAT
+            let instanceBAT = null;
+            let BAT_ADDRESS = tokenAddressList["Rinkeby"]["BAT"]; //@dev - BAT（on Rinkeby）
+            instanceBAT = new web3.eth.Contract(
+              Erc20.abi,
+              BAT_ADDRESS,
+            );
+            console.log('=== instanceBAT ===', instanceBAT);
+
             //@dev - Create instance of BokkyPooBahsDateTimeContract.sol
             let instanceBokkyPooBahsDateTimeContract = null;
             let BOKKYPOOBAHS_DATETIME_CONTRACT_ADDRESS = contractAddressList["Kovan"]["BokkyPooBahsDateTimeLibrary"]["BokkyPooBahsDateTimeContract"];
@@ -252,6 +274,8 @@ export default class UniswapAaveNYBW extends Component {
                 isMetaMask, 
                 uniswap_aave_nybw: instanceUniswapAaveNYBW,
                 dai: instanceDai,
+                zrx: instanceZRX,
+                bat: instanceBAT,
                 bokkypoobahs_datetime_contract: instanceBokkyPooBahsDateTimeContract,
                 UNISWAP_AAVE_NYBW_ADDRESS: UNISWAP_AAVE_NYBW_ADDRESS,
                 DAI_ADDRESS: DAI_ADDRESS,
