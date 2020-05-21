@@ -59,10 +59,11 @@ export default class UniswapAaveNYBW extends Component {
     addLiquidity = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
+        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
         const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
         const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
-        const _amountADesired = 1;
-        const _amountBDesired = 1;
+        const _amountADesired = web3.utils.toWei('1', 'ether');
+        const _amountBDesired = web3.utils.toWei('2', 'ether');
         const _amountAMin = 0;
         const _amountBMin = 0;
         const _to = walletAddressList["WalletAddress1"];
