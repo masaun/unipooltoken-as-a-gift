@@ -69,8 +69,8 @@ export default class UniswapAaveNYBW extends Component {
         const _to = walletAddressList["WalletAddress1"];
         const _deadline = 1590116732; // (GMT): Friday, May 22, 2020 3:05:32 AM 
 
-        let approved1 = await zrx.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amountADesired);
-        let approved2 = await bat.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amountBDesired);
+        let approved1 = await zrx.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amountADesired).send({ from: accounts[0] });
+        let approved2 = await bat.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amountBDesired).send({ from: accounts[0] });
         let res = await uniswap_aave_nybw.methods._addLiquidity(_tokenA,
                                                                 _tokenB,
                                                                 _amountADesired,
