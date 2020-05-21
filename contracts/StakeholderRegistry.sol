@@ -58,8 +58,8 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         uint _amountBDesired,
         uint _amountAMin,
         uint _amountBMin,
-        address _to,
-        uint _deadline
+        address _to
+        //uint _deadline
     ) public {
         uint _amountA; 
         uint _amountB;
@@ -70,6 +70,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         bat.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountBDesired);
 
         /// Add liquidity
+        uint _deadline = now + 1 days;
         (_amountA, _amountB, _liquidity) = uniswapV2Router01.addLiquidity(_tokenA,
                                                                           _tokenB,
                                                                           _amountADesired,
