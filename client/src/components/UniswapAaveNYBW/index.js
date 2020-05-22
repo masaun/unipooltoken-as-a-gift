@@ -95,8 +95,12 @@ export default class UniswapAaveNYBW extends Component {
 
         /// Transfer token0 and toke1 from wallet address to contract address
         const amount = web3.utils.toWei('1', 'ether');
-        let transferred1 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
-        let transferred2 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
+        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
+        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });        
+
+        /// Approve token0 and toke1 for pair address (as spender)
+        let transferred3 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
+        let transferred4 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
 
         /// mint
         let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
