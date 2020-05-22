@@ -15,6 +15,7 @@ import "./storage/McConstants.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Factory.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2ERC20.sol";
+import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
 
 /***
@@ -24,11 +25,21 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     using SafeMath for uint;
 
     IERC20 public dai;
+    IERC20 public zrx;
+    IERC20 public bat;    
     IUniswapV2Factory public uniswapV2Factory;
+    IUniswapV2Router01 public uniswapV2Router01;
 
-    constructor(address _erc20, address _uniswapV2Factory) public {
-        dai = IERC20(_erc20);
+    address UNISWAP_V2_ROUTOR_01_ADDRESS;
+
+    constructor(address daiAddress, address zrxAddress, address batAddress, address _uniswapV2Factory, address _uniswapV2Router01) public {
+        dai = IERC20(daiAddress);
+        zrx = IERC20(zrxAddress);
+        bat = IERC20(batAddress);
         uniswapV2Factory = IUniswapV2Factory(_uniswapV2Factory);
+        uniswapV2Router01 = IUniswapV2Router01(_uniswapV2Router01);
+
+        UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
     }
 
 
@@ -38,6 +49,45 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     function createUniToken(address _tokenA, address _tokenB) public {
         address _pair = uniswapV2Factory.createPair(_tokenA, _tokenB);
         emit _PairCreated(_tokenA, _tokenB, _pair);   
+    }
+
+    function _addLiquidity(
+        address _tokenA,
+        address _tokenB,
+        uint _amountADesired,
+        uint _amountBDesired,
+        uint _amountAMin,
+        uint _amountBMin,
+        address _to
+        //uint _deadline
+    ) public {
+        uint _amountA; 
+        uint _amountB;
+        uint _liquidity;
+
+        /// Approve tokenA and tokenB for UniswapV2Router01.sol address
+        zrx.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountADesired);
+        bat.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountBDesired);
+
+        /// Add liquidity
+        uint _deadline = now + 1 days;
+        (_amountA, _amountB, _liquidity) = uniswapV2Router01.addLiquidity(_tokenA,
+                                                                          _tokenB,
+                                                                          _amountADesired,
+                                                                          _amountBDesired,
+                                                                          _amountAMin,
+                                                                          _amountBMin,
+                                                                          _to,
+                                                                          _deadline);
+        emit _AddLiquidity(_amountA, _amountB, _liquidity);
+    }
+    
+
+    function mintUniToken(address _pair, address _to) public {
+        /// Mint UniToken
+        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
+        uint _liquidity = uniswapV2Pair.mint(_to);
+        emit MintUniToken(_pair, _to, _liquidity);
     }
 
     function _getPair(address _tokenA, address _tokenB) public view returns (address _pair) {
@@ -54,9 +104,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     }
 
     function getTotalSupplyOfUniToken(address _pair) public view returns (uint _totalSupplyOfUniToken) {
-        //IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
         IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
-        //uint _totalSupplyOfUniToken = uniswapV2Pair.totalSupply();
         uint _totalSupplyOfUniToken = uniswapV2ERC20.totalSupply();
         return _totalSupplyOfUniToken;  
     }

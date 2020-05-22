@@ -29,6 +29,8 @@ export default class UniswapAaveNYBW extends Component {
 
         /////// Uniswap-v2
         this.createUniToken = this.createUniToken.bind(this);
+        this.addLiquidity = this.addLiquidity.bind(this);
+        this.mintUniToken = this.mintUniToken.bind(this);
 
         /////// Getter Functions
         this.getPair = this.getPair.bind(this);
@@ -46,12 +48,56 @@ export default class UniswapAaveNYBW extends Component {
     createUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
-        //const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
+        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
+        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
         const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
         console.log('=== createUniToken() ===\n', res);
+    }
+
+    addLiquidity = async () => {
+        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS, UNISWAP_V2_ROUTOR_01_ADDRESS } = this.state;
+
+        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
+        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
+        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+        const _amountADesired = web3.utils.toWei('1', 'ether');
+        const _amountBDesired = web3.utils.toWei('4', 'ether');
+        const _amountAMin = 0;
+        const _amountBMin = 0;
+        const _to = walletAddressList["WalletAddress1"];
+        //const _deadline = 1590116732; // (GMT): Friday, May 22, 2020 3:05:32 AM 
+
+        //let approved1 = await zrx.methods.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountADesired).send({ from: accounts[0] });
+        //let approved2 = await bat.methods.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountBDesired).send({ from: accounts[0] });
+        let res = await uniswap_aave_nybw.methods._addLiquidity(_tokenA,
+                                                                _tokenB,
+                                                                _amountADesired,
+                                                                _amountBDesired,
+                                                                _amountAMin,
+                                                                _amountBMin,
+                                                                _to
+                                                                //_deadline
+                                                                ).send({ from: accounts[0] });
+        console.log('=== _addLiquidity() ===\n', res);
+    }
+
+    mintUniToken = async () => {
+        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
+
+        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Rinkeby 
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Rinkeby
+        const _to = walletAddressList["WalletAddress1"];
+
+        /// Transfer token0 and toke1 from wallet address to contract address
+        const amount = web3.utils.toWei('1', 'ether');
+        let transferred1 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
+        let transferred2 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
+
+        /// mint
+        let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
+        console.log('=== mintUniToken() ===\n', res);
     }
 
 
@@ -67,14 +113,13 @@ export default class UniswapAaveNYBW extends Component {
 
         let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
         console.log('=== _getPair() ===\n', res);
-
     }
 
     getUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";
-        //const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
+        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";    // Pair of BAT and DAI on Rinkeby 
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
 
         let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
         console.log('=== getUniToken() ===\n', res);
@@ -83,8 +128,8 @@ export default class UniswapAaveNYBW extends Component {
     _getTotalSupplyOfUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";
-        //const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
+        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";  // Pair of BAT and DAI on Rinkeby 
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";    // Pair of BAT and ZRX on Rinkeby
 
         let res = await uniswap_aave_nybw.methods.getTotalSupplyOfUniToken(_pair).call();
         console.log('=== getTotalSupplyOfUniToken() ===\n', res);
@@ -136,10 +181,12 @@ export default class UniswapAaveNYBW extends Component {
         const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
      
         let UniswapAaveNYBW = {};
+        let Erc20 = {};
         let Dai = {};
         let BokkyPooBahsDateTimeContract = {};
         try {
           UniswapAaveNYBW = require("../../../../build/contracts/StakeholderRegistry.json");  // Load artifact-file of StakeholderRegistry
+          Erc20 = require("../../../../build/contracts/IERC20.json");
           Dai = require("../../../../build/contracts/IERC20.json");               //@dev - DAI（Underlying asset）
           BokkyPooBahsDateTimeContract = require("../../../../build/contracts/BokkyPooBahsDateTimeContract.json");   //@dev - BokkyPooBahsDateTimeContract.sol (for calculate timestamp)
         } catch (e) {
@@ -183,6 +230,9 @@ export default class UniswapAaveNYBW extends Component {
               }
             }
 
+            //@notice - IUniswapV2Router01.sol
+            const UNISWAP_V2_ROUTOR_01_ADDRESS = contractAddressList["Rinkeby"]["Uniswap"]["UniswapV2Router01"];
+
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
             let DAI_ADDRESS = tokenAddressList["Rinkeby"]["DAI"]; //@dev - DAI（on Rinkeby）
@@ -191,6 +241,24 @@ export default class UniswapAaveNYBW extends Component {
               DAI_ADDRESS,
             );
             console.log('=== instanceDai ===', instanceDai);
+
+            //@dev - Create instance of ZRX
+            let instanceZRX = null;
+            let ZRX_ADDRESS = tokenAddressList["Rinkeby"]["ZRX"]; //@dev - ZRX（on Rinkeby）
+            instanceZRX = new web3.eth.Contract(
+              Erc20.abi,
+              ZRX_ADDRESS,
+            );
+            console.log('=== instanceZRX ===', instanceZRX);
+
+            //@dev - Create instance of BAT
+            let instanceBAT = null;
+            let BAT_ADDRESS = tokenAddressList["Rinkeby"]["BAT"]; //@dev - BAT（on Rinkeby）
+            instanceBAT = new web3.eth.Contract(
+              Erc20.abi,
+              BAT_ADDRESS,
+            );
+            console.log('=== instanceBAT ===', instanceBAT);
 
             //@dev - Create instance of BokkyPooBahsDateTimeContract.sol
             let instanceBokkyPooBahsDateTimeContract = null;
@@ -216,8 +284,11 @@ export default class UniswapAaveNYBW extends Component {
                 isMetaMask, 
                 uniswap_aave_nybw: instanceUniswapAaveNYBW,
                 dai: instanceDai,
+                zrx: instanceZRX,
+                bat: instanceBAT,
                 bokkypoobahs_datetime_contract: instanceBokkyPooBahsDateTimeContract,
                 UNISWAP_AAVE_NYBW_ADDRESS: UNISWAP_AAVE_NYBW_ADDRESS,
+                UNISWAP_V2_ROUTOR_01_ADDRESS: UNISWAP_V2_ROUTOR_01_ADDRESS,
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
                 this.refreshValues(
@@ -259,6 +330,10 @@ export default class UniswapAaveNYBW extends Component {
                             <h4>Uniswap Aave NYBW Hack 2020</h4> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.createUniToken}> Create UNItoken </Button> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.addLiquidity}> Add Liquidity </Button> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.mintUniToken}> Mint UNItoken </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getPair}> Get Pair </Button> <br />
 

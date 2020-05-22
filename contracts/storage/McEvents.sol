@@ -5,12 +5,24 @@ import "./McObjects.sol";
 
 contract McEvents {
 
-
     event _PairCreated(
-        address indexed _token0, 
-        address indexed _token1, 
-        address _pair
+        address indexed token0, 
+        address indexed token1, 
+        address pair
     );
+
+    event _AddLiquidity(
+        uint amountA, 
+        uint amountB,
+        uint liquidity
+    );
+
+    event MintUniToken(
+        address pair,
+        address to, 
+        uint liquidity
+    );
+
 
 
     /***
