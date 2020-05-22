@@ -66,14 +66,21 @@ export default class UniswapAaveNYBW extends Component {
         const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
         const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
         const _amountADesired = web3.utils.toWei('1', 'ether');
-        const _amountBDesired = web3.utils.toWei('4', 'ether');
+        const _amountBDesired = web3.utils.toWei('1', 'ether');
         const _amountAMin = 0;
         const _amountBMin = 0;
         const _to = walletAddressList["WalletAddress1"];
         //const _deadline = 1590116732; // (GMT): Friday, May 22, 2020 3:05:32 AM 
 
+        /// Transfer token0 and toke1 from wallet address to executor contract address
+        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, _amountADesired).send({ from: accounts[0] });
+        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, _amountBDesired).send({ from: accounts[0] });
+
+        /// Approve token0 and toke1 for pair address (as spender)
         let approved1 = await zrx.methods.approve(_pair, _amountADesired).send({ from: accounts[0] });
         let approved2 = await bat.methods.approve(_pair, _amountBDesired).send({ from: accounts[0] });
+
+        /// Add liquidity of UniToken
         let res = await uniswap_aave_nybw.methods._addLiquidity(_tokenA,
                                                                 _tokenB,
                                                                 _amountADesired,
@@ -93,10 +100,14 @@ export default class UniswapAaveNYBW extends Component {
         const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Rinkeby
         const _to = walletAddressList["WalletAddress1"];
 
-        /// Transfer token0 and toke1 from wallet address to contract address
+        /// Transfer token0 and toke1 from wallet address to executor contract address
         const amount = web3.utils.toWei('1', 'ether');
-        let transferred1 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
-        let transferred2 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
+        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
+        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });        
+
+        /// Approve token0 and toke1 for pair address (as spender)
+        let transferred3 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
+        let transferred4 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
 
         /// mint
         let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });

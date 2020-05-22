@@ -70,7 +70,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         bat.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountBDesired);
 
         /// Add liquidity
-        uint _deadline = now + 1 days;
+        uint _deadline = now + 30 days;
         (_amountA, _amountB, _liquidity) = uniswapV2Router01.addLiquidity(_tokenA,
                                                                           _tokenB,
                                                                           _amountADesired,
