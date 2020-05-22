@@ -84,12 +84,18 @@ export default class UniswapAaveNYBW extends Component {
     }
 
     mintUniToken = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
 
         const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";    // Pair of BAT and DAI on Rinkeby 
         //const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
         const _to = walletAddressList["WalletAddress1"];
 
+        /// Transfer token0 and toke1 from wallet address to contract address
+        const amount = web3.utils.toWei('1', 'ether');
+        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
+        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
+
+        /// mint
         let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
         console.log('=== mintUniToken() ===\n', res);
     }
