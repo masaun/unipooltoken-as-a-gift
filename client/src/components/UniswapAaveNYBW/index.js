@@ -59,6 +59,9 @@ export default class UniswapAaveNYBW extends Component {
     addLiquidity = async () => {
         const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS, UNISWAP_V2_ROUTOR_01_ADDRESS } = this.state;
 
+        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Rinkeby 
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Rinkeby
+
         //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
         const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
         const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
@@ -69,8 +72,8 @@ export default class UniswapAaveNYBW extends Component {
         const _to = walletAddressList["WalletAddress1"];
         //const _deadline = 1590116732; // (GMT): Friday, May 22, 2020 3:05:32 AM 
 
-        //let approved1 = await zrx.methods.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountADesired).send({ from: accounts[0] });
-        //let approved2 = await bat.methods.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountBDesired).send({ from: accounts[0] });
+        let approved1 = await zrx.methods.approve(_pair, _amountADesired).send({ from: accounts[0] });
+        let approved2 = await bat.methods.approve(_pair, _amountBDesired).send({ from: accounts[0] });
         let res = await uniswap_aave_nybw.methods._addLiquidity(_tokenA,
                                                                 _tokenB,
                                                                 _amountADesired,
