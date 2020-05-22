@@ -93,7 +93,7 @@ export default class UniswapAaveNYBW extends Component {
         const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Rinkeby
         const _to = walletAddressList["WalletAddress1"];
 
-        /// Transfer token0 and toke1 from wallet address to contract address
+        /// Transfer token0 and toke1 from wallet address to executor contract address
         const amount = web3.utils.toWei('1', 'ether');
         let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
         let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });        
