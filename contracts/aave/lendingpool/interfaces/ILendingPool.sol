@@ -3,6 +3,7 @@ pragma solidity ^0.5.16;
 interface ILendingPool {
     function deposit(address _reserve, uint256 _amount, uint16 _referralCode) external;
     function borrow(address _reserve, uint256 _amount, uint256 _interestRateMode, uint16 _referralCode) external;
+    function repay(address _reserve, uint256 _amount, address payable _onBehalfOf) external;
 
     function getReserveData(address _reserve)
     external view returns (
