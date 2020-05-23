@@ -34,7 +34,7 @@ module.exports = async function(deployer, network, accounts) {
                           _aDai)
                   .then(async function(stakeholderRegistry) {
                       if(ownerAddress && ownerAddress!="") {
-                          console.log(`=== Transfering ownerhip to address ${ownerAddress} ===`)
+                          console.log(`=== Transfering ownership to address ${ownerAddress} ===`)
                           await stakeholderRegistry.transferOwnership(ownerAddress);
                       }
                   }

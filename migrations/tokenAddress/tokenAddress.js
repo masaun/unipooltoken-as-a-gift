@@ -7,8 +7,8 @@ module.exports = {
     "Ropsten": {
         "ETH": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",    // ETH address
         "cETH": "0x1d70B01A2C3e3B2e56FcdcEfe50d5c5d70109a5D",
-        //"DAI": "0xaD6D458402F60fD3Bd25163575031ACDce07538D",  // DAI address on Ropsten（from Kyber）
-        "DAI": "0xB5E5D0F8C0cbA267CD3D7035d6AdC8eBA7Df7Cdd",    // DAI address on Ropsten（Borrowed via Compound）
+        "DAI": "0xaD6D458402F60fD3Bd25163575031ACDce07538D",    // DAI address on Ropsten（from Kyber）
+        //"DAI": "0xB5E5D0F8C0cbA267CD3D7035d6AdC8eBA7Df7Cdd",  // DAI address on Ropsten（Borrowed via Compound）
         "ZRX": "0x19787bcF63E228a6669d905E90aF397DCA313CFC",    // ZRX address on Ropsten（Borrowed via Compound）
         "BAT": "0x9636246bf34E688c6652Af544418B38eB51D2c43",    // BAT address on Ropsten（Borrowed via Compound）
         "aDAI": "0xcB1Fe6F440c49E9290c3eb7f158534c2dC374201",
