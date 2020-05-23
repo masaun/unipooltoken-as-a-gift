@@ -6,11 +6,11 @@ var contractAddressList = require('./contractAddress/contractAddress.js');
 var tokenAddressList = require('./tokenAddress/tokenAddress.js');
 var walletAddressList = require('./walletAddress/walletAddress.js');
 
-const daiAddress = tokenAddressList["Rinkeby"]["DAI"];     // DAI address on Rinkeby
-const zrxAddress = tokenAddressList["Rinkeby"]["ZRX"];     // ZRX address on Rinkeby
-const batAddress = tokenAddressList["Rinkeby"]["BAT"];     // BAT address on Rinkeby
-const _uniswapV2Factory = contractAddressList["Rinkeby"]["Uniswap"]["UniswapV2Factory"];
-const _uniswapV2Router01 = contractAddressList["Rinkeby"]["Uniswap"]["UniswapV2Router01"];
+const daiAddress = tokenAddressList["Ropsten"]["DAI"];     // DAI address on Ropsten
+const zrxAddress = tokenAddressList["Ropsten"]["ZRX"];     // ZRX address on Ropsten
+const batAddress = tokenAddressList["Ropsten"]["BAT"];     // BAT address on Ropsten
+const _uniswapV2Factory = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Factory"];
+const _uniswapV2Router01 = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Router01"];
 const _lendingPool = contractAddressList["Ropsten"]["Aave"]["LendingPool"];
 const _lendingPoolCore = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
 const _lendingPoolProvider = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];

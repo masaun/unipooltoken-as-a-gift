@@ -48,9 +48,9 @@ export default class UniswapAaveNYBW extends Component {
     createUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
-        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
-        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+        //const _tokenA = tokenAddressList["Ropsten"]["DAI"];
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
         console.log('=== createUniToken() ===\n', res);
@@ -59,12 +59,12 @@ export default class UniswapAaveNYBW extends Component {
     addLiquidity = async () => {
         const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS, UNISWAP_V2_ROUTOR_01_ADDRESS } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Rinkeby 
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Rinkeby
+        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Ropsten
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Ropsten
 
-        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
-        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
-        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+        //const _tokenA = tokenAddressList["Ropsten"]["DAI"];
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
         const _amountADesired = web3.utils.toWei('1', 'ether');
         const _amountBDesired = web3.utils.toWei('1', 'ether');
         const _amountAMin = 0;
@@ -96,8 +96,8 @@ export default class UniswapAaveNYBW extends Component {
     mintUniToken = async () => {
         const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Rinkeby 
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Rinkeby
+        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Ropsten
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Ropsten
         const _to = walletAddressList["WalletAddress1"];
 
         /// Transfer token0 and toke1 from wallet address to executor contract address
@@ -121,9 +121,9 @@ export default class UniswapAaveNYBW extends Component {
     getPair = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
-        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
-        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+        //const _tokenA = tokenAddressList["Ropsten"]["DAI"];
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
         console.log('=== _getPair() ===\n', res);
@@ -132,8 +132,8 @@ export default class UniswapAaveNYBW extends Component {
     getUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";    // Pair of BAT and DAI on Rinkeby 
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
+        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";    // Pair of BAT and DAI on Ropsten
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Ropsten
 
         let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
         console.log('=== getUniToken() ===\n', res);
@@ -142,8 +142,8 @@ export default class UniswapAaveNYBW extends Component {
     _getTotalSupplyOfUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";  // Pair of BAT and DAI on Rinkeby 
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";    // Pair of BAT and ZRX on Rinkeby
+        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";  // Pair of BAT and DAI on Ropsten
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";    // Pair of BAT and ZRX on Ropsten
 
         let res = await uniswap_aave_nybw.methods.getTotalSupplyOfUniToken(_pair).call();
         console.log('=== getTotalSupplyOfUniToken() ===\n', res);
@@ -245,11 +245,11 @@ export default class UniswapAaveNYBW extends Component {
             }
 
             //@notice - IUniswapV2Router01.sol
-            const UNISWAP_V2_ROUTOR_01_ADDRESS = contractAddressList["Rinkeby"]["Uniswap"]["UniswapV2Router01"];
+            const UNISWAP_V2_ROUTOR_01_ADDRESS = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Router01"];
 
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
-            let DAI_ADDRESS = tokenAddressList["Rinkeby"]["DAI"]; //@dev - DAI（on Rinkeby）
+            let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAI"]; //@dev - DAI（on Ropsten）
             instanceDai = new web3.eth.Contract(
               Dai.abi,
               DAI_ADDRESS,
@@ -258,7 +258,7 @@ export default class UniswapAaveNYBW extends Component {
 
             //@dev - Create instance of ZRX
             let instanceZRX = null;
-            let ZRX_ADDRESS = tokenAddressList["Rinkeby"]["ZRX"]; //@dev - ZRX（on Rinkeby）
+            let ZRX_ADDRESS = tokenAddressList["Ropsten"]["ZRX"]; //@dev - ZRX（on Ropsten）
             instanceZRX = new web3.eth.Contract(
               Erc20.abi,
               ZRX_ADDRESS,
@@ -267,7 +267,7 @@ export default class UniswapAaveNYBW extends Component {
 
             //@dev - Create instance of BAT
             let instanceBAT = null;
-            let BAT_ADDRESS = tokenAddressList["Rinkeby"]["BAT"]; //@dev - BAT（on Rinkeby）
+            let BAT_ADDRESS = tokenAddressList["Ropsten"]["BAT"]; //@dev - BAT（on Ropsten）
             instanceBAT = new web3.eth.Contract(
               Erc20.abi,
               BAT_ADDRESS,
