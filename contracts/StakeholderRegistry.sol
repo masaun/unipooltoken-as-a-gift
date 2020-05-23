@@ -17,6 +17,13 @@ import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2ERC20.sol";
 import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
+// AAVE 
+import "./aave/lendingpool/interfaces/ILendingPool.sol";
+import "./aave/lendingpool/interfaces/ILendingPoolCore.sol";
+import "./aave/lendingpool/interfaces/ILendingPoolProvider.sol";
+import "./aave/lendingpool/interfaces/IInterestRateStrategy.sol";
+import "./aave/lendingpool/interfaces/AToken.sol";
+
 
 /***
  * @notice - This contract is that ...
@@ -29,15 +36,33 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     IERC20 public bat;    
     IUniswapV2Factory public uniswapV2Factory;
     IUniswapV2Router01 public uniswapV2Router01;
+    ILendingPool public lendingPool;
+    ILendingPoolCore public lendingPoolCore;
+    ILendingPoolProvider public lendingPoolProvider;
+    AToken public aDai;
 
     address UNISWAP_V2_ROUTOR_01_ADDRESS;
 
-    constructor(address daiAddress, address zrxAddress, address batAddress, address _uniswapV2Factory, address _uniswapV2Router01) public {
+    constructor(
+        address daiAddress, 
+        address zrxAddress, 
+        address batAddress, 
+        address _uniswapV2Factory, 
+        address _uniswapV2Router01, 
+        address _lendingPool, 
+        address _lendingPoolCore, 
+        address _lendingPoolProvider, 
+        address _aDai
+    ) public {
         dai = IERC20(daiAddress);
         zrx = IERC20(zrxAddress);
         bat = IERC20(batAddress);
         uniswapV2Factory = IUniswapV2Factory(_uniswapV2Factory);
         uniswapV2Router01 = IUniswapV2Router01(_uniswapV2Router01);
+        lendingPool = ILendingPool(_lendingPool);
+        lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
+        lendingPoolProvider = ILendingPoolProvider(_lendingPoolProvider);
+        aDai = AToken(_aDai);
 
         UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
     }
