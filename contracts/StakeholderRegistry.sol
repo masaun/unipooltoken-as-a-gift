@@ -134,16 +134,12 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         return _totalSupplyOfUniToken;  
     }
 
-
     /***
      * @notice - AAVE
      **/
     function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
         lendingPool.deposit(_reserve, _amount, _referralCode);
     }
-    
-
-
 
     /***
      * @notice - Get balance

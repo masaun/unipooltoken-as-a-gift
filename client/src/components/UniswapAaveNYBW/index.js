@@ -32,6 +32,9 @@ export default class UniswapAaveNYBW extends Component {
         this.addLiquidity = this.addLiquidity.bind(this);
         this.mintUniToken = this.mintUniToken.bind(this);
 
+        /////// AAVE
+        this.depositToAaveMarket = this.depositToAaveMarket.bind(this);
+
         /////// Getter Functions
         this.getPair = this.getPair.bind(this);
         this.getUniToken = this.getUniToken.bind(this);
@@ -118,6 +121,18 @@ export default class UniswapAaveNYBW extends Component {
         console.log('=== mintUniToken() ===\n', res);
     }
 
+    /***
+     * @notice - AAVE
+     **/
+    depositToAaveMarket = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        const _reserve = tokenAddressList["Ropsten"]["DAI"];;
+        const _amount = web3.utils.toWei("1", "ether");
+        const _referralCode = 0;
+        let res = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
+        console.log('=== depositToAaveMarket() ===\n', res);
+    }
 
     /***
      * @notice - Getter function
@@ -358,6 +373,12 @@ export default class UniswapAaveNYBW extends Component {
                             <Button size={'small'} mt={3} mb={2} onClick={this.addLiquidity}> Add Liquidity </Button> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.mintUniToken}> Mint UNItoken </Button> <br />
+
+                            <hr />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.depositToAaveMarket}> Deposit To AaveMarket </Button> <br />
+
+                            <hr />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getPair}> Get Pair </Button> <br />
 
