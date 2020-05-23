@@ -131,7 +131,7 @@ export default class UniswapAaveNYBW extends Component {
         const _amount = web3.utils.toWei("1", "ether");
         const _referralCode = 0;
 
-        let res1 = await lendingPoolAddressesProvider.methods.activateReserve(_reserve).send({ from: accounts[0] });
+        //let res1 = await lendingPoolAddressesProvider.methods.activateReserve(_reserve).send({ from: accounts[0] });
         let res2 = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
         console.log('=== depositToAaveMarket() ===\n', res2);
     }

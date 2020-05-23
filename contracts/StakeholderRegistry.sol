@@ -64,6 +64,9 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
         aDai = AToken(_aDai);
 
+        /// activateReserve become true
+        lendingPoolCore.initialize(lendingPoolAddressesProvider);
+
         UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
     }
 
@@ -138,7 +141,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
      * @notice - AAVE
      **/
     function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
-        //lendingPoolCore.activateReserve(_reserve);
+        lendingPoolCore.activateReserve(_reserve);
         IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
         lendingPool.deposit(_reserve, _amount, _referralCode);
     }
