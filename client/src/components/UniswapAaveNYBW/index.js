@@ -59,12 +59,12 @@ export default class UniswapAaveNYBW extends Component {
     addLiquidity = async () => {
         const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS, UNISWAP_V2_ROUTOR_01_ADDRESS } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Ropsten
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Ropsten
-
-        //const _tokenA = tokenAddressList["Ropsten"]["DAI"];
+        /// Get pair contract address
         const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
         const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
+
         const _amountADesired = web3.utils.toWei('1', 'ether');
         const _amountBDesired = web3.utils.toWei('1', 'ether');
         const _amountAMin = 0;
@@ -96,8 +96,12 @@ export default class UniswapAaveNYBW extends Component {
     mintUniToken = async () => {
         const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Ropsten
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Ropsten
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
+
         const _to = walletAddressList["WalletAddress1"];
 
         /// Transfer token0 and toke1 from wallet address to executor contract address
@@ -132,8 +136,8 @@ export default class UniswapAaveNYBW extends Component {
     getUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";    // Pair of BAT and DAI on Ropsten
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Ropsten
+        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";  // Pair of BAT and DAI on Ropsten
+        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";    // Pair of BAT and ZRX on Ropsten
 
         let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
         console.log('=== getUniToken() ===\n', res);
