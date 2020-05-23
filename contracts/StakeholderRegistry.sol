@@ -18,9 +18,9 @@ import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2ERC20.sol";
 import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
 // AAVE 
+import "./aave/interfaces/ILendingPoolAddressesProvider.sol";
 import "./aave/lendingpool/interfaces/ILendingPool.sol";
 import "./aave/lendingpool/interfaces/ILendingPoolCore.sol";
-import "./aave/lendingpool/interfaces/ILendingPoolAddressesProvider.sol";
 import "./aave/lendingpool/interfaces/IInterestRateStrategy.sol";
 import "./aave/lendingpool/interfaces/AToken.sol";
 
@@ -65,7 +65,8 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         aDai = AToken(_aDai);
 
         /// activateReserve become true
-        lendingPoolCore.initialize(_lendingPoolAddressesProvider);
+        //lendingPoolCore.initialize(lendingPoolAddressesProvider);
+        //lendingPoolCore.initialize(_lendingPoolAddressesProvider);
 
         UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
     }
@@ -141,7 +142,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
      * @notice - AAVE
      **/
     function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
-        lendingPoolCore.activateReserve(_reserve);
+        //lendingPoolCore.activateReserve(_reserve);
         IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
         lendingPool.deposit(_reserve, _amount, _referralCode);
     }
