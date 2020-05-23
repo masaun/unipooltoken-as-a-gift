@@ -2,6 +2,7 @@ pragma solidity ^0.5.16;
 
 interface ILendingPool {
   function deposit(address _reserve, uint256 _amount, uint16 _referralCode) external;
+  
   function getReserveData(address _reserve)
     external view returns (
       uint256 totalLiquidity,
