@@ -65,7 +65,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         aDai = AToken(_aDai);
 
         /// activateReserve become true
-        lendingPoolCore.initialize(lendingPoolAddressesProvider);
+        lendingPoolCore.initialize(_lendingPoolAddressesProvider);
 
         UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
     }

@@ -8,5 +8,6 @@ interface ILendingPoolCore {
     function getReserveCurrentAverageStableBorrowRate(address _reserve) external view returns (uint256);
     function getReserveAvailableLiquidity(address _reserve) external view returns (uint256);
 
+    function initialize(address _addressesProvider) external;  /// _addressesProvider is contract address of LendingPoolAddressesProvider.sol
     function activateReserve(address _reserve) external;
 }
