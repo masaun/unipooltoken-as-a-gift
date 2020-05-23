@@ -136,8 +136,11 @@ export default class UniswapAaveNYBW extends Component {
     getUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";  // Pair of BAT and DAI on Ropsten
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";    // Pair of BAT and ZRX on Ropsten
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
 
         let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
         console.log('=== getUniToken() ===\n', res);
@@ -146,8 +149,11 @@ export default class UniswapAaveNYBW extends Component {
     _getTotalSupplyOfUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";  // Pair of BAT and DAI on Ropsten
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";    // Pair of BAT and ZRX on Ropsten
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
 
         let res = await uniswap_aave_nybw.methods.getTotalSupplyOfUniToken(_pair).call();
         console.log('=== getTotalSupplyOfUniToken() ===\n', res);
