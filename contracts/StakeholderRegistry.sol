@@ -138,6 +138,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
      * @notice - AAVE
      **/
     function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
+        IERC20(_reserve).approve(lendingPoolProvider.getLendingPoolCore(), _amount);
         lendingPool.deposit(_reserve, _amount, _referralCode);
     }
 
