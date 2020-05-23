@@ -13,7 +13,7 @@ const _uniswapV2Factory = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Fa
 const _uniswapV2Router01 = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Router01"];
 const _lendingPool = contractAddressList["Ropsten"]["Aave"]["LendingPool"];
 const _lendingPoolCore = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
-const _lendingPoolProvider = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];
+const _lendingPoolAddressesProvider = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];
 const _aDai = tokenAddressList["Ropsten"]["aDAI"];
 
 const depositedAmount = web3.utils.toWei("0.15");    // 0.15 DAI which is deposited in deployed contract. 
@@ -30,7 +30,7 @@ module.exports = async function(deployer, network, accounts) {
                           _uniswapV2Router01,
                           _lendingPool,
                           _lendingPoolCore,
-                          _lendingPoolProvider,
+                          _lendingPoolAddressesProvider,
                           _aDai)
                   .then(async function(stakeholderRegistry) {
                       if(ownerAddress && ownerAddress!="") {

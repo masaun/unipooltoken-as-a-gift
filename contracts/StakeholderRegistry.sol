@@ -20,7 +20,7 @@ import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router0
 // AAVE 
 import "./aave/lendingpool/interfaces/ILendingPool.sol";
 import "./aave/lendingpool/interfaces/ILendingPoolCore.sol";
-import "./aave/lendingpool/interfaces/ILendingPoolProvider.sol";
+import "./aave/lendingpool/interfaces/ILendingPoolAddressesProvider.sol";
 import "./aave/lendingpool/interfaces/IInterestRateStrategy.sol";
 import "./aave/lendingpool/interfaces/AToken.sol";
 
@@ -38,7 +38,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     IUniswapV2Router01 public uniswapV2Router01;
     ILendingPool public lendingPool;
     ILendingPoolCore public lendingPoolCore;
-    ILendingPoolProvider public lendingPoolProvider;
+    ILendingPoolAddressesProvider public lendingPoolAddressesProvider;
     AToken public aDai;
 
     address UNISWAP_V2_ROUTOR_01_ADDRESS;
@@ -51,7 +51,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         address _uniswapV2Router01, 
         address _lendingPool, 
         address _lendingPoolCore, 
-        address _lendingPoolProvider, 
+        address _lendingPoolAddressesProvider, 
         address _aDai
     ) public {
         dai = IERC20(daiAddress);
@@ -61,7 +61,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         uniswapV2Router01 = IUniswapV2Router01(_uniswapV2Router01);
         lendingPool = ILendingPool(_lendingPool);
         lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
-        lendingPoolProvider = ILendingPoolProvider(_lendingPoolProvider);
+        lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
         aDai = AToken(_aDai);
 
         UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
@@ -139,7 +139,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
      **/
     function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
         //lendingPoolCore.activateReserve(_reserve);
-        IERC20(_reserve).approve(lendingPoolProvider.getLendingPoolCore(), _amount);
+        IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
         lendingPool.deposit(_reserve, _amount, _referralCode);
     }
 

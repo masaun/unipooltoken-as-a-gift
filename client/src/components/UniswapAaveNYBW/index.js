@@ -125,13 +125,13 @@ export default class UniswapAaveNYBW extends Component {
      * @notice - AAVE
      **/
     depositToAaveMarket = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw, lendingPoolCore } = this.state;
+        const { accounts, web3, dai, uniswap_aave_nybw, lendingPoolCore, lendingPoolAddressesProvider } = this.state;
 
         const _reserve = tokenAddressList["Ropsten"]["DAI"];;
         const _amount = web3.utils.toWei("1", "ether");
         const _referralCode = 0;
 
-        let res1 = await lendingPoolCore.methods.activateReserve(_reserve).send({ from: accounts[0] });
+        let res1 = await lendingPoolAddressesProvider.methods.activateReserve(_reserve).send({ from: accounts[0] });
         let res2 = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
         console.log('=== depositToAaveMarket() ===\n', res2);
     }
@@ -225,12 +225,14 @@ export default class UniswapAaveNYBW extends Component {
         let Erc20 = {};
         let Dai = {};
         let LendingPoolCore = {};
+        let LendingPoolAddressesProvider = {};
         let BokkyPooBahsDateTimeContract = {};
         try {
           UniswapAaveNYBW = require("../../../../build/contracts/StakeholderRegistry.json");  // Load artifact-file of StakeholderRegistry
           Erc20 = require("../../../../build/contracts/IERC20.json");
           Dai = require("../../../../build/contracts/IERC20.json");               //@dev - DAI（Underlying asset）
           LendingPoolCore = require("../../../../build/contracts/ILendingPoolCore.json");
+          LendingPoolAddressesProvider = require("../../../../build/contracts/ILendingPoolAddressesProvider.json");
           BokkyPooBahsDateTimeContract = require("../../../../build/contracts/BokkyPooBahsDateTimeContract.json");   //@dev - BokkyPooBahsDateTimeContract.sol (for calculate timestamp)
         } catch (e) {
           console.log(e);
@@ -285,6 +287,15 @@ export default class UniswapAaveNYBW extends Component {
             );
             console.log('=== instanceLendingPoolCore ===', instanceLendingPoolCore);            
 
+            //@notice - LendingPoolAddressesProvider.sol
+            let instanceLendingPoolAddressesProvider = null;
+            let LENDINGPOOL_ADDRESS_PROVIDER = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];
+            instanceLendingPoolAddressesProvider = new web3.eth.Contract(
+              LendingPoolAddressesProvider.abi,
+              LENDINGPOOL_ADDRESS_PROVIDER,
+            );
+            console.log('=== instanceLendingPoolAddressesProvider ===', instanceLendingPoolAddressesProvider);            
+
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
             let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAI"]; //@dev - DAI（on Ropsten）
@@ -336,6 +347,7 @@ export default class UniswapAaveNYBW extends Component {
                 isMetaMask, 
                 uniswap_aave_nybw: instanceUniswapAaveNYBW,
                 lendingPoolCore: instanceLendingPoolCore,
+                lendingPoolAddressesProvider: instanceLendingPoolAddressesProvider,
                 dai: instanceDai,
                 zrx: instanceZRX,
                 bat: instanceBAT,
@@ -343,6 +355,7 @@ export default class UniswapAaveNYBW extends Component {
                 UNISWAP_AAVE_NYBW_ADDRESS: UNISWAP_AAVE_NYBW_ADDRESS,
                 UNISWAP_V2_ROUTOR_01_ADDRESS: UNISWAP_V2_ROUTOR_01_ADDRESS,
                 LENDINGPOOL_CORE_ADDRESS: LENDINGPOOL_CORE_ADDRESS,
+                LENDINGPOOL_ADDRESS_PROVIDER: LENDINGPOOL_ADDRESS_PROVIDER,
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
                 this.refreshValues(
