@@ -7,4 +7,6 @@ interface ILendingPoolCore {
     function getReserveTotalBorrowsVariable(address _reserve) external view returns (uint256);
     function getReserveCurrentAverageStableBorrowRate(address _reserve) external view returns (uint256);
     function getReserveAvailableLiquidity(address _reserve) external view returns (uint256);
+
+    function activateReserve(address _reserve) external;
 }
