@@ -317,7 +317,7 @@ export default class UniswapAaveNYBW extends Component {
 
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
-            let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAI"]; //@dev - DAI（on Ropsten）
+            let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAIaave"]; //@dev - DAI（on Ropsten）
             instanceDai = new web3.eth.Contract(
               Dai.abi,
               DAI_ADDRESS,
