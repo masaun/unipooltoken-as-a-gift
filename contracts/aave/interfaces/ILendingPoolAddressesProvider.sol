@@ -1,36 +1,44 @@
-pragma solidity ^0.5.16;
+pragma solidity ^0.5.0;
 
-interface ILendingPoolAddressesProvider {
-    function getLendingPool() external view returns (address);
-    function setLendingPoolImpl(address _pool) external;
+/**
+@title ILendingPoolAddressesProvider interface
+@notice provides the interface to fetch the LendingPoolCore address
+ */
 
-    function getLendingPoolCore() external view returns (address payable);
-    function setLendingPoolCoreImpl(address _lendingPoolCore) external;
+contract ILendingPoolAddressesProvider {
 
-    function getLendingPoolConfigurator() external view returns (address);
-    function setLendingPoolConfiguratorImpl(address _configurator) external;
+    function getLendingPool() public view returns (address);
+    function setLendingPoolImpl(address _pool) public;
 
-    function getLendingPoolDataProvider() external view returns (address);
-    function setLendingPoolDataProviderImpl(address _provider) external;
+    function getLendingPoolCore() public view returns (address payable);
+    function setLendingPoolCoreImpl(address _lendingPoolCore) public;
 
-    function getLendingPoolParametersProvider() external view returns (address);
-    function setLendingPoolParametersProviderImpl(address _parametersProvider) external;
+    function getLendingPoolConfigurator() public view returns (address);
+    function setLendingPoolConfiguratorImpl(address _configurator) public;
 
-    function getTokenDistributor() external view returns (address);
-    function setTokenDistributor(address _tokenDistributor) external;
+    function getLendingPoolDataProvider() public view returns (address);
+    function setLendingPoolDataProviderImpl(address _provider) public;
 
-    function getFeeProvider() external view returns (address);
-    function setFeeProviderImpl(address _feeProvider) external;
+    function getLendingPoolParametersProvider() public view returns (address);
+    function setLendingPoolParametersProviderImpl(address _parametersProvider) public;
 
-    function getLendingPoolLiquidationManager() external view returns (address);
-    function setLendingPoolLiquidationManager(address _manager) external;
+    function getTokenDistributor() public view returns (address);
+    function setTokenDistributor(address _tokenDistributor) public;
 
-    function getLendingPoolManager() external view returns (address);
-    function setLendingPoolManager(address _lendingPoolManager) external;
 
-    function getPriceOracle() external view returns (address);
-    function setPriceOracle(address _priceOracle) external;
+    function getFeeProvider() public view returns (address);
+    function setFeeProviderImpl(address _feeProvider) public;
 
-    function getLendingRateOracle() external view returns (address);
-    function setLendingRateOracle(address _lendingRateOracle) external;
+    function getLendingPoolLiquidationManager() public view returns (address);
+    function setLendingPoolLiquidationManager(address _manager) public;
+
+    function getLendingPoolManager() public view returns (address);
+    function setLendingPoolManager(address _lendingPoolManager) public;
+
+    function getPriceOracle() public view returns (address);
+    function setPriceOracle(address _priceOracle) public;
+
+    function getLendingRateOracle() public view returns (address);
+    function setLendingRateOracle(address _lendingRateOracle) public;
+
 }
