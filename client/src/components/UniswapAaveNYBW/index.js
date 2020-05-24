@@ -125,9 +125,10 @@ export default class UniswapAaveNYBW extends Component {
      * @notice - AAVE
      **/
     depositToAaveMarket = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw, lendingPool, lendingPoolCore, lendingPoolAddressesProvider, LENDINGPOOL, LENDINGPOOL_CORE, LENDINGPOOL_ADDRESS_PROVIDER } = this.state;
+        const { accounts, web3, dai, uniswap_aave_nybw, lendingPool, lendingPoolCore, lendingPoolAddressesProvider, UNISWAP_AAVE_NYBW_ADDRESS, LENDINGPOOL, LENDINGPOOL_CORE, LENDINGPOOL_ADDRESS_PROVIDER } = this.state;
 
-        const _reserve = tokenAddressList["Ropsten"]["DAI"];;
+        const _reserve = tokenAddressList["Ropsten"]["DAIaave"];
+        //const _reserve = tokenAddressList["Ropsten"]["DAI"];
         const _amount = web3.utils.toWei("1", "ether");
         const _referralCode = 0;
 
@@ -136,6 +137,7 @@ export default class UniswapAaveNYBW extends Component {
         //let res1 = await lendingPoolCore.methods.activateReserve(_reserve).send({ from: accounts[0] });
         let res4 = await dai.methods.approve(LENDINGPOOL, _amount).send({ from: accounts[0] });
         let res1 = await dai.methods.approve(LENDINGPOOL_CORE, _amount).send({ from: accounts[0] });
+        let res5 = await dai.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amount).send({ from: accounts[0] });
         let les2 = await lendingPool.methods.deposit(_reserve, _amount, _referralCode).send({ from: accounts[0] });
         let res3 = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
         console.log('=== depositToAaveMarket() ===\n', res3);
