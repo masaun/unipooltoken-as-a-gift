@@ -132,7 +132,7 @@ export default class UniswapAaveNYBW extends Component {
         const _referralCode = 0;
 
         /// activateReserve become true
-        lendingPoolCore.initialize(LENDINGPOOL_ADDRESS_PROVIDER);
+        await lendingPoolCore.methods.initialize(LENDINGPOOL_ADDRESS_PROVIDER).send({ from: accounts[0] });
         let res1 = await lendingPoolCore.methods.activateReserve(_reserve).send({ from: accounts[0] });
         let res2 = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
         console.log('=== depositToAaveMarket() ===\n', res2);
@@ -234,7 +234,8 @@ export default class UniswapAaveNYBW extends Component {
           Erc20 = require("../../../../build/contracts/IERC20.json");
           Dai = require("../../../../build/contracts/IERC20.json");               //@dev - DAI（Underlying asset）
           LendingPoolCore = require("../../../../build/contracts/ILendingPoolCore.json");
-          LendingPoolAddressesProvider = require("../../../../build/contracts/ILendingPoolAddressesProvider.json");
+          //LendingPoolAddressesProvider = require("../../../../build/contracts/ILendingPoolAddressesProvider.json");
+          LendingPoolAddressesProvider = require("../../../../build/contracts/LendingPoolAddressesProvider.json");
           BokkyPooBahsDateTimeContract = require("../../../../build/contracts/BokkyPooBahsDateTimeContract.json");   //@dev - BokkyPooBahsDateTimeContract.sol (for calculate timestamp)
         } catch (e) {
           console.log(e);
