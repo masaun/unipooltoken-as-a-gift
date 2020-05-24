@@ -17,6 +17,16 @@ import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2ERC20.sol";
 import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
+// AAVE 
+import "./aave/configuration/LendingPoolAddressesProvider.sol";
+import "./aave/lendingpool/LendingPool.sol";
+import "./aave/lendingpool/LendingPoolCore.sol";
+// import "./aave/interfaces/ILendingPoolAddressesProvider.sol";
+// import "./aave/lendingpool/interfaces/ILendingPool.sol";
+// import "./aave/lendingpool/interfaces/ILendingPoolCore.sol";
+// import "./aave/lendingpool/interfaces/IInterestRateStrategy.sol";
+// import "./aave/lendingpool/interfaces/AToken.sol";
+
 
 /***
  * @notice - This contract is that ...
@@ -29,16 +39,41 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     IERC20 public bat;    
     IUniswapV2Factory public uniswapV2Factory;
     IUniswapV2Router01 public uniswapV2Router01;
+    LendingPool public lendingPool;
+    LendingPoolCore public lendingPoolCore;
+    LendingPoolAddressesProvider public lendingPoolAddressesProvider;
+    // ILendingPool public lendingPool;
+    // ILendingPoolCore public lendingPoolCore;
+    // ILendingPoolAddressesProvider public LendingPoolAddressesProvider;
+    AToken public aDai;  /// Included LendingPool.sol
 
     address UNISWAP_V2_ROUTOR_01_ADDRESS;
 
-    constructor(address daiAddress, address zrxAddress, address batAddress, address _uniswapV2Factory, address _uniswapV2Router01) public {
+    constructor(
+        address daiAddress, 
+        address zrxAddress, 
+        address batAddress, 
+        address _uniswapV2Factory, 
+        address _uniswapV2Router01, 
+        address _lendingPool, 
+        address payable _lendingPoolCore, 
+        address _lendingPoolAddressesProvider, 
+        address _aDai
+    ) public {
         dai = IERC20(daiAddress);
         zrx = IERC20(zrxAddress);
         bat = IERC20(batAddress);
         uniswapV2Factory = IUniswapV2Factory(_uniswapV2Factory);
         uniswapV2Router01 = IUniswapV2Router01(_uniswapV2Router01);
+        lendingPool = LendingPool(_lendingPool);
+        lendingPoolCore = LendingPoolCore(_lendingPoolCore);
+        lendingPoolAddressesProvider = LendingPoolAddressesProvider(_lendingPoolAddressesProvider);
+        // lendingPool = ILendingPool(_lendingPool);
+        // lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
+        // lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
+        aDai = AToken(_aDai);
 
+        /// activateReserve become true
         UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
     }
 
@@ -109,7 +144,14 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         return _totalSupplyOfUniToken;  
     }
 
-
+    /***
+     * @notice - AAVE
+     **/
+    function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
+        //lendingPoolCore.activateReserve(_reserve);
+        IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
+        lendingPool.deposit(_reserve, _amount, _referralCode);
+    }
 
     /***
      * @notice - Get balance

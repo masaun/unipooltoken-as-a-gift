@@ -32,6 +32,9 @@ export default class UniswapAaveNYBW extends Component {
         this.addLiquidity = this.addLiquidity.bind(this);
         this.mintUniToken = this.mintUniToken.bind(this);
 
+        /////// AAVE
+        this.depositToAaveMarket = this.depositToAaveMarket.bind(this);
+
         /////// Getter Functions
         this.getPair = this.getPair.bind(this);
         this.getUniToken = this.getUniToken.bind(this);
@@ -48,9 +51,9 @@ export default class UniswapAaveNYBW extends Component {
     createUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
-        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
-        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+        //const _tokenA = tokenAddressList["Ropsten"]["DAI"];
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
         console.log('=== createUniToken() ===\n', res);
@@ -59,12 +62,12 @@ export default class UniswapAaveNYBW extends Component {
     addLiquidity = async () => {
         const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS, UNISWAP_V2_ROUTOR_01_ADDRESS } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Rinkeby 
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Rinkeby
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
 
-        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
-        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
-        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
         const _amountADesired = web3.utils.toWei('1', 'ether');
         const _amountBDesired = web3.utils.toWei('1', 'ether');
         const _amountAMin = 0;
@@ -96,8 +99,12 @@ export default class UniswapAaveNYBW extends Component {
     mintUniToken = async () => {
         const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a"; // Pair of BAT and DAI on Rinkeby 
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";   // Pair of BAT and ZRX on Rinkeby
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
+
         const _to = walletAddressList["WalletAddress1"];
 
         /// Transfer token0 and toke1 from wallet address to executor contract address
@@ -114,6 +121,27 @@ export default class UniswapAaveNYBW extends Component {
         console.log('=== mintUniToken() ===\n', res);
     }
 
+    /***
+     * @notice - AAVE
+     **/
+    depositToAaveMarket = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw, lendingPool, lendingPoolCore, lendingPoolAddressesProvider, UNISWAP_AAVE_NYBW_ADDRESS, LENDINGPOOL, LENDINGPOOL_CORE, LENDINGPOOL_ADDRESS_PROVIDER } = this.state;
+
+        const _reserve = tokenAddressList["Ropsten"]["DAIaave"];
+        //const _reserve = tokenAddressList["Ropsten"]["DAI"];
+        const _amount = web3.utils.toWei("1", "ether");
+        const _referralCode = 0;
+
+        /// activateReserve become true
+        //await lendingPoolCore.methods.initialize(LENDINGPOOL_ADDRESS_PROVIDER).send({ from: accounts[0] });
+        //let res1 = await lendingPoolCore.methods.activateReserve(_reserve).send({ from: accounts[0] });
+        let res4 = await dai.methods.approve(LENDINGPOOL, _amount).send({ from: accounts[0] });
+        let res1 = await dai.methods.approve(LENDINGPOOL_CORE, _amount).send({ from: accounts[0] });
+        //let res5 = await dai.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amount).send({ from: accounts[0] });
+        let les2 = await lendingPool.methods.deposit(_reserve, _amount, _referralCode).send({ from: accounts[0] });
+        let res3 = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
+        console.log('=== depositToAaveMarket() ===\n', res3);
+    }
 
     /***
      * @notice - Getter function
@@ -121,9 +149,9 @@ export default class UniswapAaveNYBW extends Component {
     getPair = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _tokenA = tokenAddressList["Rinkeby"]["DAI"];
-        const _tokenA = tokenAddressList["Rinkeby"]["ZRX"];
-        const _tokenB = tokenAddressList["Rinkeby"]["BAT"];
+        //const _tokenA = tokenAddressList["Ropsten"]["DAI"];
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
         console.log('=== _getPair() ===\n', res);
@@ -132,8 +160,11 @@ export default class UniswapAaveNYBW extends Component {
     getUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";    // Pair of BAT and DAI on Rinkeby 
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";  // Pair of BAT and ZRX on Rinkeby
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
 
         let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
         console.log('=== getUniToken() ===\n', res);
@@ -142,8 +173,11 @@ export default class UniswapAaveNYBW extends Component {
     _getTotalSupplyOfUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _pair = "0xFba8f6edfc207B1cC536eb49079b02f29139c95a";  // Pair of BAT and DAI on Rinkeby 
-        const _pair = "0xaC62050E010E068af361476A69D9e3412CfDe429";    // Pair of BAT and ZRX on Rinkeby
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
 
         let res = await uniswap_aave_nybw.methods.getTotalSupplyOfUniToken(_pair).call();
         console.log('=== getTotalSupplyOfUniToken() ===\n', res);
@@ -197,11 +231,18 @@ export default class UniswapAaveNYBW extends Component {
         let UniswapAaveNYBW = {};
         let Erc20 = {};
         let Dai = {};
+        let LendingPool = {};
+        let LendingPoolCore = {};
+        let LendingPoolAddressesProvider = {};
         let BokkyPooBahsDateTimeContract = {};
         try {
           UniswapAaveNYBW = require("../../../../build/contracts/StakeholderRegistry.json");  // Load artifact-file of StakeholderRegistry
           Erc20 = require("../../../../build/contracts/IERC20.json");
-          Dai = require("../../../../build/contracts/IERC20.json");               //@dev - DAI（Underlying asset）
+          Dai = require("../../../../build/contracts/IERC20.json");
+          LendingPool = require("../../../../build/contracts/ILendingPool.json");
+          LendingPoolCore = require("../../../../build/contracts/ILendingPoolCore.json");
+          LendingPoolAddressesProvider = require("../../../../build/contracts/ILendingPoolAddressesProvider.json");
+          //LendingPoolAddressesProvider = require("../../../../build/contracts/LendingPoolAddressesProvider.json");
           BokkyPooBahsDateTimeContract = require("../../../../build/contracts/BokkyPooBahsDateTimeContract.json");   //@dev - BokkyPooBahsDateTimeContract.sol (for calculate timestamp)
         } catch (e) {
           console.log(e);
@@ -245,11 +286,38 @@ export default class UniswapAaveNYBW extends Component {
             }
 
             //@notice - IUniswapV2Router01.sol
-            const UNISWAP_V2_ROUTOR_01_ADDRESS = contractAddressList["Rinkeby"]["Uniswap"]["UniswapV2Router01"];
+            const UNISWAP_V2_ROUTOR_01_ADDRESS = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Router01"];
+
+            //@notice - ILendingPool.sol
+            let instanceLendingPool = null;
+            let LENDINGPOOL = contractAddressList["Ropsten"]["Aave"]["LendingPool"];
+            instanceLendingPool = new web3.eth.Contract(
+              LendingPool.abi,
+              LENDINGPOOL,
+            );
+            console.log('=== instanceLendingPool ===', instanceLendingPool);
+
+            //@notice - ILendingPoolCore.sol
+            let instanceLendingPoolCore = null;
+            let LENDINGPOOL_CORE = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
+            instanceLendingPoolCore = new web3.eth.Contract(
+              LendingPoolCore.abi,
+              LENDINGPOOL_CORE,
+            );
+            console.log('=== instanceLendingPoolCore ===', instanceLendingPoolCore);            
+
+            //@notice - LendingPoolAddressesProvider.sol
+            let instanceLendingPoolAddressesProvider = null;
+            let LENDINGPOOL_ADDRESS_PROVIDER = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];
+            instanceLendingPoolAddressesProvider = new web3.eth.Contract(
+              LendingPoolAddressesProvider.abi,
+              LENDINGPOOL_ADDRESS_PROVIDER,
+            );
+            console.log('=== instanceLendingPoolAddressesProvider ===', instanceLendingPoolAddressesProvider);            
 
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
-            let DAI_ADDRESS = tokenAddressList["Rinkeby"]["DAI"]; //@dev - DAI（on Rinkeby）
+            let DAI_ADDRESS = tokenAddressList["Ropsten"]["DAIaave"]; //@dev - DAI（on Ropsten）
             instanceDai = new web3.eth.Contract(
               Dai.abi,
               DAI_ADDRESS,
@@ -258,7 +326,7 @@ export default class UniswapAaveNYBW extends Component {
 
             //@dev - Create instance of ZRX
             let instanceZRX = null;
-            let ZRX_ADDRESS = tokenAddressList["Rinkeby"]["ZRX"]; //@dev - ZRX（on Rinkeby）
+            let ZRX_ADDRESS = tokenAddressList["Ropsten"]["ZRX"]; //@dev - ZRX（on Ropsten）
             instanceZRX = new web3.eth.Contract(
               Erc20.abi,
               ZRX_ADDRESS,
@@ -267,7 +335,7 @@ export default class UniswapAaveNYBW extends Component {
 
             //@dev - Create instance of BAT
             let instanceBAT = null;
-            let BAT_ADDRESS = tokenAddressList["Rinkeby"]["BAT"]; //@dev - BAT（on Rinkeby）
+            let BAT_ADDRESS = tokenAddressList["Ropsten"]["BAT"]; //@dev - BAT（on Ropsten）
             instanceBAT = new web3.eth.Contract(
               Erc20.abi,
               BAT_ADDRESS,
@@ -297,12 +365,18 @@ export default class UniswapAaveNYBW extends Component {
                 hotLoaderDisabled,
                 isMetaMask, 
                 uniswap_aave_nybw: instanceUniswapAaveNYBW,
+                lendingPool: instanceLendingPool,
+                lendingPoolCore: instanceLendingPoolCore,
+                lendingPoolAddressesProvider: instanceLendingPoolAddressesProvider,
                 dai: instanceDai,
                 zrx: instanceZRX,
                 bat: instanceBAT,
                 bokkypoobahs_datetime_contract: instanceBokkyPooBahsDateTimeContract,
                 UNISWAP_AAVE_NYBW_ADDRESS: UNISWAP_AAVE_NYBW_ADDRESS,
                 UNISWAP_V2_ROUTOR_01_ADDRESS: UNISWAP_V2_ROUTOR_01_ADDRESS,
+                LENDINGPOOL: LENDINGPOOL,
+                LENDINGPOOL_CORE: LENDINGPOOL_CORE,
+                LENDINGPOOL_ADDRESS_PROVIDER: LENDINGPOOL_ADDRESS_PROVIDER,
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
                 this.refreshValues(
@@ -348,6 +422,12 @@ export default class UniswapAaveNYBW extends Component {
                             <Button size={'small'} mt={3} mb={2} onClick={this.addLiquidity}> Add Liquidity </Button> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.mintUniToken}> Mint UNItoken </Button> <br />
+
+                            <hr />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.depositToAaveMarket}> Deposit To AaveMarket </Button> <br />
+
+                            <hr />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getPair}> Get Pair </Button> <br />
 
