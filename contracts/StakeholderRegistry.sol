@@ -154,6 +154,14 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     }
 
     /***
+     * @notice - AAVE / getter functions
+     **/
+    function getLendingPoolManagerAddress() public view returns (address lendingPoolManager) {
+        return lendingPoolAddressesProvider.getLendingPoolManager();
+    }
+    
+
+    /***
      * @notice - Get balance
      **/
     function balanceOfContract() public view returns (uint balanceOfContract_DAI, uint balanceOfContract_ETH) {

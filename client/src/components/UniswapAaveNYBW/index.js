@@ -35,10 +35,15 @@ export default class UniswapAaveNYBW extends Component {
         /////// AAVE
         this.depositToAaveMarket = this.depositToAaveMarket.bind(this);
 
-        /////// Getter Functions
+        /////// Getter Functions of Uniswap-v2
         this.getPair = this.getPair.bind(this);
         this.getUniToken = this.getUniToken.bind(this);
         this._getTotalSupplyOfUniToken = this._getTotalSupplyOfUniToken.bind(this);
+
+        /////// Getter Functions of AAVE
+        this._getLendingPoolManagerAddress = this._getLendingPoolManagerAddress.bind(this);
+
+        /////// Getter Functions of others
         this._balanceOfContract = this._balanceOfContract.bind(this);
 
         /////// Test Functions
@@ -183,6 +188,12 @@ export default class UniswapAaveNYBW extends Component {
         console.log('=== getTotalSupplyOfUniToken() ===\n', res);
     }
 
+    _getLendingPoolManagerAddress = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        let res = await uniswap_aave_nybw.methods.getLendingPoolManagerAddress().call();
+        console.log('=== getLendingPoolManagerAddress() ===\n', res);
+    }
 
     _balanceOfContract = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
@@ -434,6 +445,8 @@ export default class UniswapAaveNYBW extends Component {
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getUniToken}> Get UniToken </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._getTotalSupplyOfUniToken}> Get TotalSupply Of UniToken </Button> <br />
+
+                            <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._getLendingPoolManagerAddress}> Get LendingPoolManager Address </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._balanceOfContract}> Balance of contract </Button> <br />
                         </Card>
