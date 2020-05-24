@@ -18,12 +18,14 @@ import "./uniswap-v2/uniswap-v2-core/contracts/interfaces/IUniswapV2ERC20.sol";
 import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router01.sol";
 
 // AAVE 
-//import "./aave/configuration/LendingPoolAddressesProvider.sol";
-import "./aave/interfaces/ILendingPoolAddressesProvider.sol";
-import "./aave/lendingpool/interfaces/ILendingPool.sol";
-import "./aave/lendingpool/interfaces/ILendingPoolCore.sol";
-import "./aave/lendingpool/interfaces/IInterestRateStrategy.sol";
-import "./aave/lendingpool/interfaces/AToken.sol";
+import "./aave/configuration/LendingPoolAddressesProvider.sol";
+import "./aave/lendingpool/LendingPool.sol";
+import "./aave/lendingpool/LendingPoolCore.sol";
+// import "./aave/interfaces/ILendingPoolAddressesProvider.sol";
+// import "./aave/lendingpool/interfaces/ILendingPool.sol";
+// import "./aave/lendingpool/interfaces/ILendingPoolCore.sol";
+// import "./aave/lendingpool/interfaces/IInterestRateStrategy.sol";
+// import "./aave/lendingpool/interfaces/AToken.sol";
 
 
 /***
@@ -37,11 +39,13 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     IERC20 public bat;    
     IUniswapV2Factory public uniswapV2Factory;
     IUniswapV2Router01 public uniswapV2Router01;
-    ILendingPool public lendingPool;
-    ILendingPoolCore public lendingPoolCore;
-    ILendingPoolAddressesProvider public LendingPoolAddressesProvider;
-    //LendingPoolAddressesProvider public lendingPoolAddressesProvider;
-    AToken public aDai;
+    LendingPool public lendingPool;
+    LendingPoolCore public lendingPoolCore;
+    LendingPoolAddressesProvider public lendingPoolAddressesProvider;
+    // ILendingPool public lendingPool;
+    // ILendingPoolCore public lendingPoolCore;
+    // ILendingPoolAddressesProvider public LendingPoolAddressesProvider;
+    AToken public aDai;  /// Included LendingPool.sol
 
     address UNISWAP_V2_ROUTOR_01_ADDRESS;
 
@@ -52,7 +56,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         address _uniswapV2Factory, 
         address _uniswapV2Router01, 
         address _lendingPool, 
-        address _lendingPoolCore, 
+        address payable _lendingPoolCore, 
         address _lendingPoolAddressesProvider, 
         address _aDai
     ) public {
@@ -61,9 +65,12 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         bat = IERC20(batAddress);
         uniswapV2Factory = IUniswapV2Factory(_uniswapV2Factory);
         uniswapV2Router01 = IUniswapV2Router01(_uniswapV2Router01);
-        lendingPool = ILendingPool(_lendingPool);
-        lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
-        lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
+        lendingPool = LendingPool(_lendingPool);
+        lendingPoolCore = LendingPoolCore(_lendingPoolCore);
+        lendingPoolAddressesProvider = LendingPoolAddressesProvider(_lendingPoolAddressesProvider);
+        // lendingPool = ILendingPool(_lendingPool);
+        // lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
+        // lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
         aDai = AToken(_aDai);
 
         /// activateReserve become true
