@@ -125,15 +125,16 @@ export default class UniswapAaveNYBW extends Component {
      * @notice - AAVE
      **/
     depositToAaveMarket = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw, lendingPoolCore, lendingPoolAddressesProvider, LENDINGPOOL_ADDRESS_PROVIDER } = this.state;
+        const { accounts, web3, dai, uniswap_aave_nybw, lendingPool, lendingPoolCore, lendingPoolAddressesProvider, LENDINGPOOL_ADDRESS_PROVIDER } = this.state;
 
         const _reserve = tokenAddressList["Ropsten"]["DAI"];;
         const _amount = web3.utils.toWei("1", "ether");
         const _referralCode = 0;
 
         /// activateReserve become true
-        await lendingPoolCore.methods.initialize(LENDINGPOOL_ADDRESS_PROVIDER).send({ from: accounts[0] });
-        let res1 = await lendingPoolCore.methods.activateReserve(_reserve).send({ from: accounts[0] });
+        //await lendingPoolCore.methods.initialize(LENDINGPOOL_ADDRESS_PROVIDER).send({ from: accounts[0] });
+        //let res1 = await lendingPoolCore.methods.activateReserve(_reserve).send({ from: accounts[0] });
+        let les1 = await lendingPool.methods.deposit(_reserve, _amount, _referralCode).send({ from: accounts[0] });
         let res2 = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
         console.log('=== depositToAaveMarket() ===\n', res2);
     }
@@ -226,16 +227,18 @@ export default class UniswapAaveNYBW extends Component {
         let UniswapAaveNYBW = {};
         let Erc20 = {};
         let Dai = {};
+        let LendingPool = {};
         let LendingPoolCore = {};
         let LendingPoolAddressesProvider = {};
         let BokkyPooBahsDateTimeContract = {};
         try {
           UniswapAaveNYBW = require("../../../../build/contracts/StakeholderRegistry.json");  // Load artifact-file of StakeholderRegistry
           Erc20 = require("../../../../build/contracts/IERC20.json");
-          Dai = require("../../../../build/contracts/IERC20.json");               //@dev - DAI（Underlying asset）
+          Dai = require("../../../../build/contracts/IERC20.json");
+          LendingPool = require("../../../../build/contracts/ILendingPool.json");
           LendingPoolCore = require("../../../../build/contracts/ILendingPoolCore.json");
-          //LendingPoolAddressesProvider = require("../../../../build/contracts/ILendingPoolAddressesProvider.json");
-          LendingPoolAddressesProvider = require("../../../../build/contracts/LendingPoolAddressesProvider.json");
+          LendingPoolAddressesProvider = require("../../../../build/contracts/ILendingPoolAddressesProvider.json");
+          //LendingPoolAddressesProvider = require("../../../../build/contracts/LendingPoolAddressesProvider.json");
           BokkyPooBahsDateTimeContract = require("../../../../build/contracts/BokkyPooBahsDateTimeContract.json");   //@dev - BokkyPooBahsDateTimeContract.sol (for calculate timestamp)
         } catch (e) {
           console.log(e);
@@ -281,12 +284,21 @@ export default class UniswapAaveNYBW extends Component {
             //@notice - IUniswapV2Router01.sol
             const UNISWAP_V2_ROUTOR_01_ADDRESS = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Router01"];
 
+            //@notice - ILendingPool.sol
+            let instanceLendingPool = null;
+            let LENDINGPOOL = contractAddressList["Ropsten"]["Aave"]["LendingPool"];
+            instanceLendingPool = new web3.eth.Contract(
+              LendingPool.abi,
+              LENDINGPOOL,
+            );
+            console.log('=== instanceLendingPool ===', instanceLendingPool);
+
             //@notice - ILendingPoolCore.sol
             let instanceLendingPoolCore = null;
-            let LENDINGPOOL_CORE_ADDRESS = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
+            let LENDINGPOOL_CORE = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
             instanceLendingPoolCore = new web3.eth.Contract(
               LendingPoolCore.abi,
-              LENDINGPOOL_CORE_ADDRESS,
+              LENDINGPOOL_CORE,
             );
             console.log('=== instanceLendingPoolCore ===', instanceLendingPoolCore);            
 
@@ -349,6 +361,7 @@ export default class UniswapAaveNYBW extends Component {
                 hotLoaderDisabled,
                 isMetaMask, 
                 uniswap_aave_nybw: instanceUniswapAaveNYBW,
+                lendingPool: instanceLendingPool,
                 lendingPoolCore: instanceLendingPoolCore,
                 lendingPoolAddressesProvider: instanceLendingPoolAddressesProvider,
                 dai: instanceDai,
@@ -357,7 +370,8 @@ export default class UniswapAaveNYBW extends Component {
                 bokkypoobahs_datetime_contract: instanceBokkyPooBahsDateTimeContract,
                 UNISWAP_AAVE_NYBW_ADDRESS: UNISWAP_AAVE_NYBW_ADDRESS,
                 UNISWAP_V2_ROUTOR_01_ADDRESS: UNISWAP_V2_ROUTOR_01_ADDRESS,
-                LENDINGPOOL_CORE_ADDRESS: LENDINGPOOL_CORE_ADDRESS,
+                LENDINGPOOL: LENDINGPOOL,
+                LENDINGPOOL_CORE: LENDINGPOOL_CORE,
                 LENDINGPOOL_ADDRESS_PROVIDER: LENDINGPOOL_ADDRESS_PROVIDER,
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
