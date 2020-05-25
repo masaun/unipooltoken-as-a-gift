@@ -133,7 +133,6 @@ export default class UniswapAaveNYBW extends Component {
         const { accounts, web3, dai, uniswap_aave_nybw, lendingPool, lendingPoolCore, lendingPoolAddressesProvider, UNISWAP_AAVE_NYBW_ADDRESS, LENDINGPOOL, LENDINGPOOL_CORE, LENDINGPOOL_ADDRESS_PROVIDER } = this.state;
 
         const _reserve = tokenAddressList["Ropsten"]["DAIaave"];
-        //const _reserve = tokenAddressList["Ropsten"]["DAI"];
         const _amount = web3.utils.toWei("1", "ether");
         const _referralCode = 0;
 
