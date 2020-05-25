@@ -143,12 +143,29 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         return _pair;
     }
 
-    function getUniToken(address _pair) public view returns (string memory _name, string memory _symbol, uint _decimals) {
+    function getUniToken(address _pair) 
+        public 
+        view 
+        returns (string memory _name, 
+                 string memory _symbol, 
+                 uint _decimals, 
+                 address _factory, 
+                 address _token0, 
+                 address _token1) 
+    {
+        /// General info of pair
         IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
         string memory _name = uniswapV2ERC20.name();
         string memory _symbol = uniswapV2ERC20.symbol();
         uint _decimals = uniswapV2ERC20.decimals();
-        return (_name, _symbol, _decimals);
+
+        /// Consist of address of pair
+        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
+        address _factory = uniswapV2Pair.factory();
+        address _token0 = uniswapV2Pair.token0();
+        address _token1 = uniswapV2Pair.token1();
+
+        return (_name, _symbol, _decimals, _factory, _token0, _token1);
     }
 
     function getTotalSupplyOfUniToken(address _pair) public view returns (uint _totalSupplyOfUniToken) {
