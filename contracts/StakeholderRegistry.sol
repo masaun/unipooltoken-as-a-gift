@@ -45,7 +45,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     // ILendingPool public lendingPool;
     // ILendingPoolCore public lendingPoolCore;
     // ILendingPoolAddressesProvider public LendingPoolAddressesProvider;
-    AToken public aDai;  /// Included LendingPool.sol
+    AToken public aUSDC;  /// Included LendingPool.sol
 
     address UNISWAP_V2_ROUTOR_01_ADDRESS;
 
@@ -58,7 +58,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         address _lendingPool, 
         address payable _lendingPoolCore, 
         address _lendingPoolAddressesProvider, 
-        address _aDai
+        address _aUSDC
     ) public {
         dai = IERC20(daiAddress);
         zrx = IERC20(zrxAddress);
@@ -71,7 +71,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         // lendingPool = ILendingPool(_lendingPool);
         // lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
         // lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
-        aDai = AToken(_aDai);
+        aUSDC = AToken(_aUSDC);
 
         /// activateReserve become true
         UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
