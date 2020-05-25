@@ -125,6 +125,19 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         emit MintUniToken(_pair, _to, _liquidity);
     }
 
+    /***
+     * @notice - AAVE
+     **/
+    function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
+        //lendingPoolCore.activateReserve(_reserve);
+        IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
+        lendingPool.deposit(_reserve, _amount, _referralCode);
+    }
+
+
+    /***
+     * @notice - Uniswap-v2 / getter functions
+     **/
     function _getPair(address _tokenA, address _tokenB) public view returns (address _pair) {
         address _pair = uniswapV2Factory.getPair(_tokenA, _tokenB);
         return _pair;
@@ -142,15 +155,6 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
         uint _totalSupplyOfUniToken = uniswapV2ERC20.totalSupply();
         return _totalSupplyOfUniToken;  
-    }
-
-    /***
-     * @notice - AAVE
-     **/
-    function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
-        //lendingPoolCore.activateReserve(_reserve);
-        IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
-        lendingPool.deposit(_reserve, _amount, _referralCode);
     }
 
     /***
