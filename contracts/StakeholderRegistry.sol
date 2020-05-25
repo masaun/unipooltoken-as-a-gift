@@ -45,7 +45,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     // ILendingPool public lendingPool;
     // ILendingPoolCore public lendingPoolCore;
     // ILendingPoolAddressesProvider public LendingPoolAddressesProvider;
-    AToken public aDai;  /// Included LendingPool.sol
+    AToken public aUSDC;  /// Included LendingPool.sol
 
     address UNISWAP_V2_ROUTOR_01_ADDRESS;
 
@@ -58,7 +58,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         address _lendingPool, 
         address payable _lendingPoolCore, 
         address _lendingPoolAddressesProvider, 
-        address _aDai
+        address _aUSDC
     ) public {
         dai = IERC20(daiAddress);
         zrx = IERC20(zrxAddress);
@@ -71,7 +71,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         // lendingPool = ILendingPool(_lendingPool);
         // lendingPoolCore = ILendingPoolCore(_lendingPoolCore);
         // lendingPoolAddressesProvider = ILendingPoolAddressesProvider(_lendingPoolAddressesProvider);
-        aDai = AToken(_aDai);
+        aUSDC = AToken(_aUSDC);
 
         /// activateReserve become true
         UNISWAP_V2_ROUTOR_01_ADDRESS = _uniswapV2Router01;
@@ -125,17 +125,47 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         emit MintUniToken(_pair, _to, _liquidity);
     }
 
+    /***
+     * @notice - AAVE
+     **/
+    function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
+        //lendingPoolCore.activateReserve(_reserve);
+        IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
+        lendingPool.deposit(_reserve, _amount, _referralCode);
+    }
+
+
+    /***
+     * @notice - Uniswap-v2 / getter functions
+     **/
     function _getPair(address _tokenA, address _tokenB) public view returns (address _pair) {
         address _pair = uniswapV2Factory.getPair(_tokenA, _tokenB);
         return _pair;
     }
 
-    function getUniToken(address _pair) public view returns (string memory _name, string memory _symbol, uint _decimals) {
+    function getUniToken(address _pair) 
+        public 
+        view 
+        returns (string memory _name, 
+                 string memory _symbol, 
+                 uint _decimals, 
+                 address _factory, 
+                 address _token0, 
+                 address _token1) 
+    {
+        /// General info of pair
         IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
         string memory _name = uniswapV2ERC20.name();
         string memory _symbol = uniswapV2ERC20.symbol();
         uint _decimals = uniswapV2ERC20.decimals();
-        return (_name, _symbol, _decimals);
+
+        /// Consist of address of pair
+        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
+        address _factory = uniswapV2Pair.factory();
+        address _token0 = uniswapV2Pair.token0();
+        address _token1 = uniswapV2Pair.token1();
+
+        return (_name, _symbol, _decimals, _factory, _token0, _token1);
     }
 
     function getTotalSupplyOfUniToken(address _pair) public view returns (uint _totalSupplyOfUniToken) {
@@ -145,13 +175,12 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     }
 
     /***
-     * @notice - AAVE
+     * @notice - AAVE / getter functions
      **/
-    function depositToAaveMarket(address _reserve, uint256 _amount, uint16 _referralCode) public returns (bool) {
-        //lendingPoolCore.activateReserve(_reserve);
-        IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
-        lendingPool.deposit(_reserve, _amount, _referralCode);
+    function getLendingPoolManagerAddress() public view returns (address lendingPoolManager) {
+        return lendingPoolAddressesProvider.getLendingPoolManager();
     }
+    
 
     /***
      * @notice - Get balance

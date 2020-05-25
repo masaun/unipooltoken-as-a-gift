@@ -35,10 +35,15 @@ export default class UniswapAaveNYBW extends Component {
         /////// AAVE
         this.depositToAaveMarket = this.depositToAaveMarket.bind(this);
 
-        /////// Getter Functions
+        /////// Getter Functions of Uniswap-v2
         this.getPair = this.getPair.bind(this);
         this.getUniToken = this.getUniToken.bind(this);
         this._getTotalSupplyOfUniToken = this._getTotalSupplyOfUniToken.bind(this);
+
+        /////// Getter Functions of AAVE
+        this._getLendingPoolManagerAddress = this._getLendingPoolManagerAddress.bind(this);
+
+        /////// Getter Functions of others
         this._balanceOfContract = this._balanceOfContract.bind(this);
 
         /////// Test Functions
@@ -128,19 +133,16 @@ export default class UniswapAaveNYBW extends Component {
         const { accounts, web3, dai, uniswap_aave_nybw, lendingPool, lendingPoolCore, lendingPoolAddressesProvider, UNISWAP_AAVE_NYBW_ADDRESS, LENDINGPOOL, LENDINGPOOL_CORE, LENDINGPOOL_ADDRESS_PROVIDER } = this.state;
 
         const _reserve = tokenAddressList["Ropsten"]["DAIaave"];
-        //const _reserve = tokenAddressList["Ropsten"]["DAI"];
         const _amount = web3.utils.toWei("1", "ether");
         const _referralCode = 0;
 
         /// activateReserve become true
-        //await lendingPoolCore.methods.initialize(LENDINGPOOL_ADDRESS_PROVIDER).send({ from: accounts[0] });
-        //let res1 = await lendingPoolCore.methods.activateReserve(_reserve).send({ from: accounts[0] });
-        let res4 = await dai.methods.approve(LENDINGPOOL, _amount).send({ from: accounts[0] });
-        let res1 = await dai.methods.approve(LENDINGPOOL_CORE, _amount).send({ from: accounts[0] });
-        //let res5 = await dai.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amount).send({ from: accounts[0] });
-        let les2 = await lendingPool.methods.deposit(_reserve, _amount, _referralCode).send({ from: accounts[0] });
-        let res3 = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
-        console.log('=== depositToAaveMarket() ===\n', res3);
+        let res1 = await dai.methods.approve(LENDINGPOOL, _amount).send({ from: accounts[0] });
+        let res2 = await dai.methods.approve(LENDINGPOOL_CORE, _amount).send({ from: accounts[0] });
+        let res3 = await lendingPool.methods.deposit(_reserve, _amount, _referralCode).send({ from: accounts[0] });
+        //let res4 = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
+        console.log('=== deposit() - AAVE ===\n', res3);
+        //console.log('=== depositToAaveMarket() ===\n', res4);
     }
 
     /***
@@ -149,9 +151,10 @@ export default class UniswapAaveNYBW extends Component {
     getPair = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _tokenA = tokenAddressList["Ropsten"]["DAI"];
-        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
-        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _tokenA = tokenAddressList["Ropsten"]["ETH"];
+        const _tokenB = tokenAddressList["Ropsten"]["USDCaave"];
+        // const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        // const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
         console.log('=== _getPair() ===\n', res);
@@ -161,9 +164,10 @@ export default class UniswapAaveNYBW extends Component {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
         /// Get pair contract address
-        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
-        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        //const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        //const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        //const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
         console.log('=== _pair() ===\n', _pair);
 
         let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
@@ -174,15 +178,22 @@ export default class UniswapAaveNYBW extends Component {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
         /// Get pair contract address
-        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
-        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        //const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        //const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        //const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
         console.log('=== _pair() ===\n', _pair);
 
         let res = await uniswap_aave_nybw.methods.getTotalSupplyOfUniToken(_pair).call();
         console.log('=== getTotalSupplyOfUniToken() ===\n', res);
     }
 
+    _getLendingPoolManagerAddress = async () => {
+        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+
+        let res = await uniswap_aave_nybw.methods.getLendingPoolManagerAddress().call();
+        console.log('=== getLendingPoolManagerAddress() ===\n', res);
+    }
 
     _balanceOfContract = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
@@ -434,6 +445,8 @@ export default class UniswapAaveNYBW extends Component {
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this.getUniToken}> Get UniToken </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._getTotalSupplyOfUniToken}> Get TotalSupply Of UniToken </Button> <br />
+
+                            <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._getLendingPoolManagerAddress}> Get LendingPoolManager Address </Button> <br />
 
                             <Button mainColor="DarkCyan" size={'small'} mt={3} mb={2} onClick={this._balanceOfContract}> Balance of contract </Button> <br />
                         </Card>

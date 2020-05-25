@@ -20,9 +20,9 @@ module.exports = {
             "UniswapV2Router01": "0xf164fC0Ec4E93095b804a4795bBe1e041497b92a"
         },
         "Aave": {
-            "LendingPool": "0x9E5C7835E4b13368fd628196C4f1c6cEc89673Fa",
-            "LendingPoolCore": "0x4295Ee704716950A4dE7438086d6f0FBC0BA9472",
-            "LendingPoolAddressesProvider": "0x1c8756FD2B28e9426CDBDcC7E3c4d64fa9A54728",
+            "LendingPool": "0xA03105cc79128D7d67f36401c8518695C08C7d0C",                   /// AAVE - Uniswap Market
+            "LendingPoolCore": "0x07Cdaf84340410ca8dB93bDDf77783C61032B75d",               /// AAVE - Uniswap Market
+            "LendingPoolAddressesProvider": "0xA037D6a4E81dD149bd72cc0B28626E965608522D",  /// AAVE - Uniswap Market
         }        
     }    
 }
