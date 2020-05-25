@@ -151,9 +151,10 @@ export default class UniswapAaveNYBW extends Component {
     getPair = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        //const _tokenA = tokenAddressList["Ropsten"]["DAI"];
-        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
-        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _tokenA = tokenAddressList["Ropsten"]["ETH"];
+        const _tokenB = tokenAddressList["Ropsten"]["USDCaave"];
+        // const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        // const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
         console.log('=== _getPair() ===\n', res);
