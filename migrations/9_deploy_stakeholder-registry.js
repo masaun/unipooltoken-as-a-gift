@@ -31,7 +31,7 @@ module.exports = async function(deployer, network, accounts) {
                           _lendingPool,
                           _lendingPoolCore,
                           _lendingPoolAddressesProvider,
-                          _aDai)
+                          _aUSDC)
                   .then(async function(stakeholderRegistry) {
                       if(ownerAddress && ownerAddress!="") {
                           console.log(`=== Transfering ownership to address ${ownerAddress} ===`)
