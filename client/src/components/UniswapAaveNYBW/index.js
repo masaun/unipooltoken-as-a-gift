@@ -168,7 +168,8 @@ export default class UniswapAaveNYBW extends Component {
         /// Get pair contract address
         const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
         const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        //const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
         console.log('=== _pair() ===\n', _pair);
 
         let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
