@@ -15,7 +15,15 @@ export const tokenAddressList = {
         "DAIaave": "0xf80A32A835F79D7787E8a8ee5721D0fEaFd78108",    // DAI address on Ropsten（from AAVE fancet）
         "ZRXaave": "0x02d7055704EfF050323A2E5ee4ba05DB2A588959",    // ZRX address on Ropsten（from AAVE fancet）
         "BATaave": "0x85B24b3517E3aC7bf72a14516160541A60cFF19d",    // BAT address on Ropsten（from AAVE fancet）        
-        "aDAI": "0xcB1Fe6F440c49E9290c3eb7f158534c2dC374201",
+        "UNI_USDC_ETH": "0x4a5f38a84f2b2fba46ca904d3a0d220a4498fdb5",  /// AAVE - Uniswap Market
+        "UNI_LINK_ETH": "0xcaC157F51Bc1e85e9672E1BD93984336B2Da601f",  /// AAVE - Uniswap Market
+        "UNI_DAI_ETH": "0x2667a4e8b9ce9cfd56107d96f72ed66d4108fbcb",   /// AAVE - Uniswap Market
+        "UNI_LEND_ETH": "0xc0dfd4ce5e328a48ea6e1234037efef084fa4ae2",  /// AAVE - Uniswap Market
+        "UNI_MKR_ETH": "0x671d05bcb540d8b7ab8fc0924e1f0213b7889554",   /// AAVE - Uniswap Market
+        "UNI_SETH_ETH": "0x43bd4aca7ab79696bf464a95a71a250c798c6966",  /// AAVE - Uniswap Market
+        "aETH": "0x83c59bC077D453c7734af970F07fd782afeE67b6",          /// AAVE - Uniswap Market
+        "aUSDC": "0x6868abf32e68f199e5d8059a22334eefe9098e49",         /// AAVE - Uniswap Market
+        "aUSDT": "0xdf4b778A8886D20754c4eD54b76f4740FbA0580c",         /// AAVE - Uniswap Market
     },
     "Rinkeby": {
         "DAI": "0x5592EC0cfb4dbc12D3aB100b257153436a1f0FEa",    // DAI address on Rinkeby  
