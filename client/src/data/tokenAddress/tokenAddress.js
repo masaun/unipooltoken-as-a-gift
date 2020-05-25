@@ -14,7 +14,8 @@ export const tokenAddressList = {
         "BAT": "0x9636246bf34E688c6652Af544418B38eB51D2c43",    // BAT address on Ropsten（Borrowed via Compound）
         "DAIaave": "0xf80A32A835F79D7787E8a8ee5721D0fEaFd78108",    // DAI address on Ropsten（from AAVE fancet）
         "ZRXaave": "0x02d7055704EfF050323A2E5ee4ba05DB2A588959",    // ZRX address on Ropsten（from AAVE fancet）
-        "BATaave": "0x85B24b3517E3aC7bf72a14516160541A60cFF19d",    // BAT address on Ropsten（from AAVE fancet）        
+        "BATaave": "0x85B24b3517E3aC7bf72a14516160541A60cFF19d",    // BAT address on Ropsten（from AAVE fancet）
+        "MKRaave": "0x2eA9df3bABe04451c9C3B06a2c844587c59d9C37",    // MKR address on Ropsten（from AAVE fancet）
         "UNI_USDC_ETH": "0x4a5f38a84f2b2fba46ca904d3a0d220a4498fdb5",  /// AAVE - Uniswap Market
         "UNI_LINK_ETH": "0xcaC157F51Bc1e85e9672E1BD93984336B2Da601f",  /// AAVE - Uniswap Market
         "UNI_DAI_ETH": "0x2667a4e8b9ce9cfd56107d96f72ed66d4108fbcb",   /// AAVE - Uniswap Market
