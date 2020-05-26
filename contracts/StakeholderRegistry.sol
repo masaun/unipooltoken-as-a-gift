@@ -160,7 +160,13 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
     
     function uniTokenAsGift(address _pair, address _recipient, uint _amount) public returns (bool) {
         IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
+
+        /// Transfer DAI from msg.sender to contract
         uniswapV2ERC20.transferFrom(msg.sender, address(this), _amount);
+
+        /// Transfer DAI from contract to recipient
+        uniswapV2ERC20.approve(_recipient, _amount);
+        uniswapV2ERC20.transferFrom(address(this), _recipient, _amount);        
     }
     
 

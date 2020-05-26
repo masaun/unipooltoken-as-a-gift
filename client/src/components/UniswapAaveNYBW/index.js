@@ -137,7 +137,7 @@ export default class UniswapAaveNYBW extends Component {
         console.log('=== _pair() ===\n', _pair);
 
         const _recipient = walletAddressList["WalletAddress1"];
-        const _amount = web3.utils.toWei('1', 'ether');
+        const _amount = web3.utils.toWei('0.115', 'ether');
 
         /// Create instance of IUniswapV2ERC20.sol
         let UniswapV2ERC20 = {};
@@ -150,8 +150,10 @@ export default class UniswapAaveNYBW extends Component {
         );
         console.log('=== uniswap_v2_erc20 ===', uniswap_v2_erc20);
 
-        /// Approve 
-        let res = await uniswap_v2_erc20.methods.approve(_pair, _amount).send({ from: accounts[0] }); 
+        /// Approve and call uniTokenAsGift
+        let res1 = await uniswap_v2_erc20.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amount).send({ from: accounts[0] }); 
+        let res2 = await uniswap_aave_nybw.methods.uniTokenAsGift(_pair, _recipient, _amount).send({ from: accounts[0] });         
+        console.log('=== uniTokenAsGift() ===', res2);
     }
 
 
