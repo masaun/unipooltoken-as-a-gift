@@ -11,17 +11,29 @@ contract McEvents {
         address pair
     );
 
+    event MintUniToken(
+        address pair,
+        address to, 
+        uint liquidity
+    );
+
     event _AddLiquidity(
         uint amountA, 
         uint amountB,
         uint liquidity
     );
 
-    event MintUniToken(
-        address pair,
-        address to, 
+    event SyndicatedAddLiquidity(
+        address userA,
+        address userB,
+        address tokenA,
+        address tokenB,
+        uint amountA, 
+        uint amountB,
         uint liquidity
     );
+
+
 
 
 

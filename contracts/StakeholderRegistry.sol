@@ -125,8 +125,37 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         emit _AddLiquidity(_amountA, _amountB, _liquidity);
     }
 
-    function syndicatedAddLiquidity() public returns (bool) {
-        /// In progress
+    function syndicatedAddLiquidity(
+        address _userA,
+        address _userB,
+        address _tokenA,
+        address _tokenB,
+        uint _amountADesired,
+        uint _amountBDesired,
+        uint _amountAMin,
+        uint _amountBMin,
+        address _to
+        //uint _deadline
+    ) public returns (bool) {
+        uint _amountA; 
+        uint _amountB;
+        uint _liquidity;
+
+        /// Approve tokenA and tokenB for UniswapV2Router01.sol address
+        zrx.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountADesired);
+        bat.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountBDesired);
+
+        /// Add liquidity
+        uint _deadline = now + 30 days;
+        (_amountA, _amountB, _liquidity) = uniswapV2Router01.addLiquidity(_tokenA,
+                                                                          _tokenB,
+                                                                          _amountADesired,
+                                                                          _amountBDesired,
+                                                                          _amountAMin,
+                                                                          _amountBMin,
+                                                                          _to,
+                                                                          _deadline);
+        emit SyndicatedAddLiquidity(_userA, _userB, _tokenA, _tokenB, _amountA, _amountB, _liquidity);
     }
     
 
