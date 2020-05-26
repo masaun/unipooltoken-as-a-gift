@@ -64,6 +64,31 @@ export default class UniswapAaveNYBW extends Component {
         console.log('=== createUniToken() ===\n', res);
     }
 
+    mintUniToken = async () => {
+        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
+
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
+
+        const _to = walletAddressList["WalletAddress1"];
+
+        /// Transfer token0 and toke1 from wallet address to executor contract address
+        const amount = web3.utils.toWei('1', 'ether');
+        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
+        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });        
+
+        /// Approve token0 and toke1 for pair address (as spender)
+        let transferred3 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
+        let transferred4 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
+
+        /// mint
+        let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
+        console.log('=== mintUniToken() ===\n', res);
+    }
+
     addLiquidity = async () => {
         const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS, UNISWAP_V2_ROUTOR_01_ADDRESS } = this.state;
 
@@ -101,30 +126,6 @@ export default class UniswapAaveNYBW extends Component {
         console.log('=== _addLiquidity() ===\n', res);
     }
 
-    mintUniToken = async () => {
-        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
-
-        /// Get pair contract address
-        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
-        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
-        console.log('=== _pair() ===\n', _pair);
-
-        const _to = walletAddressList["WalletAddress1"];
-
-        /// Transfer token0 and toke1 from wallet address to executor contract address
-        const amount = web3.utils.toWei('1', 'ether');
-        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
-        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });        
-
-        /// Approve token0 and toke1 for pair address (as spender)
-        let transferred3 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
-        let transferred4 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
-
-        /// mint
-        let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
-        console.log('=== mintUniToken() ===\n', res);
-    }
 
     /***
      * @notice - AAVE
@@ -151,10 +152,10 @@ export default class UniswapAaveNYBW extends Component {
     getPair = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        const _tokenA = tokenAddressList["Ropsten"]["ETH"];
-        const _tokenB = tokenAddressList["Ropsten"]["USDCaave"];
-        // const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
-        // const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        //const _tokenA = tokenAddressList["Ropsten"]["ETH"];
+        //const _tokenB = tokenAddressList["Ropsten"]["USDCaave"];
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
         console.log('=== _getPair() ===\n', res);
@@ -433,9 +434,9 @@ export default class UniswapAaveNYBW extends Component {
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.createUniToken}> Create UNItoken </Button> <br />
 
-                            <Button size={'small'} mt={3} mb={2} onClick={this.addLiquidity}> Add Liquidity </Button> <br />
-
                             <Button size={'small'} mt={3} mb={2} onClick={this.mintUniToken}> Mint UNItoken </Button> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.addLiquidity}> Add Liquidity </Button> <br />
 
                             <hr />
 

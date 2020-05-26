@@ -82,8 +82,16 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
      * @notice - Uniswap-v2 / Create Pair (=Create UNItoken)
      **/
     function createUniToken(address _tokenA, address _tokenB) public {
+        /// Create UniToken Address (Pair Address)
         address _pair = uniswapV2Factory.createPair(_tokenA, _tokenB);
         emit _PairCreated(_tokenA, _tokenB, _pair);   
+    }
+
+    function mintUniToken(address _pair, address _to) public {
+        /// Mint UniToken
+        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
+        uint _liquidity = uniswapV2Pair.mint(_to);
+        emit MintUniToken(_pair, _to, _liquidity);
     }
 
     function _addLiquidity(
@@ -116,14 +124,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
                                                                           _deadline);
         emit _AddLiquidity(_amountA, _amountB, _liquidity);
     }
-    
 
-    function mintUniToken(address _pair, address _to) public {
-        /// Mint UniToken
-        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
-        uint _liquidity = uniswapV2Pair.mint(_to);
-        emit MintUniToken(_pair, _to, _liquidity);
-    }
 
     /***
      * @notice - AAVE
