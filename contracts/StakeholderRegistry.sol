@@ -122,7 +122,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
                                                                           _amountBMin,
                                                                           _to,
                                                                           _deadline);
-        emit _AddLiquidity(_amountA, _amountB, _liquidity);
+        emit _AddLiquidity(_tokenA, _tokenB, _amountA, _amountB, _liquidity);
     }
 
     function syndicatedAddLiquidity(

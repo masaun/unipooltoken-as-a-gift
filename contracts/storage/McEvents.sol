@@ -18,6 +18,8 @@ contract McEvents {
     );
 
     event _AddLiquidity(
+        address tokenA,
+        address tokenB,
         uint amountA, 
         uint amountB,
         uint liquidity
