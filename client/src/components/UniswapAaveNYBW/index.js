@@ -31,6 +31,7 @@ export default class UniswapAaveNYBW extends Component {
         this.createUniToken = this.createUniToken.bind(this);
         this.addLiquidity = this.addLiquidity.bind(this);
         this.mintUniToken = this.mintUniToken.bind(this);
+        this.uniTokenAsGift = this.uniTokenAsGift.bind(this);
 
         /////// AAVE
         this.depositToAaveMarket = this.depositToAaveMarket.bind(this);
@@ -125,6 +126,34 @@ export default class UniswapAaveNYBW extends Component {
                                                                 ).send({ from: accounts[0] });
         console.log('=== _addLiquidity() ===\n', res);
     }
+
+    uniTokenAsGift = async () => {
+        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
+
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
+
+        const _recipient = walletAddressList["WalletAddress1"];
+        const _amount = web3.utils.toWei('1', 'ether');
+
+        /// Create instance of IUniswapV2ERC20.sol
+        let UniswapV2ERC20 = {};
+        UniswapV2ERC20 = require("../../../../build/contracts/IUniswapV2ERC20.json");        
+        let uniswap_v2_erc20 = null;
+        let UNISWAP_V2_ERC20 = _pair;
+        uniswap_v2_erc20 = new web3.eth.Contract(
+          UniswapV2ERC20.abi,
+          UNISWAP_V2_ERC20,
+        );
+        console.log('=== uniswap_v2_erc20 ===', uniswap_v2_erc20);
+
+        /// Approve 
+        let res = await uniswap_v2_erc20.methods.approve(_pair, _amount).send({ from: accounts[0] }); 
+    }
+
 
 
     /***
@@ -437,6 +466,8 @@ export default class UniswapAaveNYBW extends Component {
                             <Button size={'small'} mt={3} mb={2} onClick={this.mintUniToken}> Mint UNItoken </Button> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.addLiquidity}> Add Liquidity </Button> <br />
+
+                            <Button size={'small'} mt={3} mb={2} onClick={this.uniTokenAsGift}> UniToken As A Gift </Button> <br />
 
                             <hr />
 

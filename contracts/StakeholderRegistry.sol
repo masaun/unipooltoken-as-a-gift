@@ -158,7 +158,11 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         emit SyndicatedAddLiquidity(_userA, _userB, _tokenA, _tokenB, _amountA, _amountB, _liquidity);
     }
     
-
+    function uniTokenAsGift(address _pair, address _recipient, uint _amount) public returns (bool) {
+        IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
+        uniswapV2ERC20.transferFrom(msg.sender, address(this), _amount);
+    }
+    
 
 
 
