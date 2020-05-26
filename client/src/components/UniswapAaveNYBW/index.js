@@ -170,8 +170,11 @@ export default class UniswapAaveNYBW extends Component {
         //const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
         console.log('=== _pair() ===\n', _pair);
 
-        let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
-        console.log('=== getUniToken() ===\n', res);
+        let res1 = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
+        console.log('=== getUniToken() ===\n', res1);
+
+        let res2 = await uniswap_aave_nybw.methods.getUniPoolReserves(_pair).call();
+        console.log('=== getUniPoolReserves() ===\n', res2);
     }
 
     _getTotalSupplyOfUniToken = async () => {
