@@ -125,6 +125,14 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         emit _AddLiquidity(_amountA, _amountB, _liquidity);
     }
 
+    function syndicatedAddLiquidity() public returns (bool) {
+        /// In progress
+    }
+    
+
+
+
+
 
     /***
      * @notice - AAVE
@@ -134,10 +142,6 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
         lendingPool.deposit(_reserve, _amount, _referralCode);
     }
-
-
-
-
 
     /***
      * @notice - Uniswap-v2 / getter functions
