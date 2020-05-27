@@ -5,8 +5,8 @@ import Footer from "./components/Footer/index.js";
 import Hero from "./components/Hero/index.js";
 import Web3Info from "./components/Web3Info/index.js";
 
-// UniswapAaveNYBW
-import UniswapAaveNYBW from "./components/UniswapAaveNYBW/index.js";
+// UniPoolToken as a Gift
+import UniPoolTokenAsAGift from "./components/UniPoolTokenAsAGift/index.js";
 
 import { Grid } from '@material-ui/core';
 import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image, EthAddress } from 'rimble-ui';
@@ -51,7 +51,7 @@ class App extends Component {
   componentDidMount = async () => {
     const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
  
-    let StakeholderRegistry = {};
+    let UniPoolTokenAsAGift = {};
     try {
       StakeholderRegistry = require("../../build/contracts/StakeholderRegistry.json");          // Load artifact-file of StakeholderRegistry
     } catch (e) {
@@ -174,7 +174,7 @@ class App extends Component {
     );
   }
 
-  renderUniswapAaveNYBW() {
+  renderUniPoolTokenAsAGift() {
     return (
       <div className={styles.wrapper}>
         <UniswapAaveNYBW />
@@ -187,7 +187,7 @@ class App extends Component {
       <div className={styles.App}>
         <Header />
           {this.state.route === '' && this.renderInstructions()}
-          {this.state.route === 'uniswap-aave-nybw-hack-2020' && this.renderUniswapAaveNYBW()} 
+          {this.state.route === 'unipooltoken-as-a-gift' && this.renderUniPoolTokenAsAGift()} 
         <Footer />
       </div>
     );

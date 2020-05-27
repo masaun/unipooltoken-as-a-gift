@@ -21,7 +21,7 @@ import "./uniswap-v2/uniswap-v2-periphery/contracts/interfaces/IUniswapV2Router0
 /***
  * @notice - This contract is that ...
  **/
-contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConstants {
+contract UniPoolTokenAsAGift is OwnableOriginal(msg.sender), McStorage, McConstants {
     using SafeMath for uint;
 
     IERC20 public dai;
