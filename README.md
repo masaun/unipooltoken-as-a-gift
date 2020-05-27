@@ -2,15 +2,17 @@
 
 ***
 ## 【Introduction of UniPoolToken as a Gift 🎁】
-- This is a dApp
+- This is a dApp that user can create UniPoolToken or add liquidity to UniPoolToken freely and send their UniPoolToken as a gift to someone whoever user want. 
+  - UniPoolToken is created by Uniswap-v2 contract.
+  - Use `Pair (ERC-20) / UniswapV2ERC20.sol` below for sending UniPoolToken.  
+    https://uniswap.org/docs/v2/smart-contracts/pair-erc-20/
 
 &nbsp;
 
 ## 【User Flow】
-- ① 
-- ②
-- ③
-- ④
+- ① User create UniPoolToken or add liquidity to UniPoolToken
+- ② User specify "toAddress" which is wallet address of someone whoever user want.
+- ③ User send UniPoolToken to specified wallet address. 
 
 &nbsp;
 
@@ -35,7 +37,7 @@ Kovan Test Network
 ```
 (root directory)
 
-$ npm run migrate:Kovan
+$ npm run migrate:Ropsten
 ```
 
 &nbsp;
@@ -59,7 +61,7 @@ $ npm run client
 
 4. Access to browser by using link 
 ```
-http://127.0.0.1:3000/pooltogether-nybw-hack-2020
+http://127.0.0.1:3000/uniswap-aave-nybw-hack-2020
 ```
 
 &nbsp;
@@ -69,7 +71,7 @@ http://127.0.0.1:3000/pooltogether-nybw-hack-2020
 
 ## 【References】
 - [Uniswap-v2]：  
-  - Bounty   
+  - Bounty of Uniswap-v2 at NYBW Hackathon / Gitcoin
     - https://gitcoin.co/issue/aave/aave-gitcoin-hackaton-2019/8/4326  
     - https://gitcoin.co/issue/Uniswap/uniswap-v2-core/76/4324  
 
@@ -82,8 +84,15 @@ http://127.0.0.1:3000/pooltogether-nybw-hack-2020
       https://github.com/Uniswap/uniswap-lib 
 
   - Doc  
-    - Uniswap-v2 / Factory Contract（Crete Pare）  
+    - Factory / UniswapV2Factory.sol  
       https://uniswap.org/docs/v2/smart-contracts/factory/
+    - Pair / UniswapV2Pair.sol  
+      https://uniswap.org/docs/v2/smart-contracts/pair/
+    - Pair (ERC-20) / UniswapV2ERC20.sol  
+      https://uniswap.org/docs/v2/smart-contracts/pair-erc-20/
+    - Router / UniswapV2Router01.sol  
+      https://uniswap.org/docs/v2/smart-contracts/router/
+
 
   - Article
     - Uniswap V2 Mainnet Launch
