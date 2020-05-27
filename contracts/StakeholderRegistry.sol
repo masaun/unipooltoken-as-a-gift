@@ -37,11 +37,7 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         address zrxAddress, 
         address batAddress, 
         address _uniswapV2Factory, 
-        address _uniswapV2Router01, 
-        address _lendingPool, 
-        address payable _lendingPoolCore, 
-        address _lendingPoolAddressesProvider, 
-        address _aUSDC
+        address _uniswapV2Router01
     ) public {
         dai = IERC20(daiAddress);
         zrx = IERC20(zrxAddress);
