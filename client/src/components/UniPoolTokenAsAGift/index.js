@@ -15,7 +15,7 @@ import { contractAddressList } from '../../data/contractAddress/contractAddress.
 import { tokenAddressList } from '../../data/tokenAddress/tokenAddress.js'
 
 
-export default class UniswapAaveNYBW extends Component {
+export default class UniPoolTokenAsAGift extends Component {
     constructor(props) {    
         super(props);
 
@@ -52,48 +52,48 @@ export default class UniswapAaveNYBW extends Component {
      * @notice - Uniswap-v2
      **/
     createUniToken = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+        const { accounts, web3, dai, unipooltoken_as_a_gift } = this.state;
 
         //const _tokenA = tokenAddressList["Ropsten"]["DAI"];
         const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
         const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
-        let res = await uniswap_aave_nybw.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
+        let res = await unipooltoken_as_a_gift.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
         console.log('=== createUniToken() ===\n', res);
     }
 
     mintUniToken = async () => {
-        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
+        const { accounts, web3, dai, zrx, bat, unipooltoken_as_a_gift, UNIPOOLTOKEN_AS_A_GIFT_ADDRESS } = this.state;
 
         /// Get pair contract address
         const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
         const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        const _pair = await unipooltoken_as_a_gift.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
         console.log('=== _pair() ===\n', _pair);
 
         const _to = walletAddressList["WalletAddress1"];
 
         /// Transfer token0 and toke1 from wallet address to executor contract address
         const amount = web3.utils.toWei('1', 'ether');
-        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
-        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });        
+        let transferred1 = await zrx.methods.transfer(UNIPOOLTOKEN_AS_A_GIFT_ADDRESS, amount).send({ from: accounts[0] });
+        let transferred2 = await bat.methods.transfer(UNIPOOLTOKEN_AS_A_GIFT_ADDRESS, amount).send({ from: accounts[0] });        
 
         /// Approve token0 and toke1 for pair address (as spender)
         let transferred3 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
         let transferred4 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
 
         /// mint
-        let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
+        let res = await unipooltoken_as_a_gift.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
         console.log('=== mintUniToken() ===\n', res);
     }
 
     addLiquidity = async () => {
-        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS, UNISWAP_V2_ROUTOR_01_ADDRESS } = this.state;
+        const { accounts, web3, dai, zrx, bat, unipooltoken_as_a_gift, UNIPOOLTOKEN_AS_A_GIFT_ADDRESS, UNISWAP_V2_ROUTOR_01_ADDRESS } = this.state;
 
         /// Get pair contract address
         const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
         const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        const _pair = await unipooltoken_as_a_gift.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
         console.log('=== _pair() ===\n', _pair);
 
         const _amountADesired = web3.utils.toWei('1', 'ether');
@@ -104,8 +104,8 @@ export default class UniswapAaveNYBW extends Component {
         //const _deadline = 1590116732; // (GMT): Friday, May 22, 2020 3:05:32 AM 
 
         /// Transfer token0 and toke1 from wallet address to executor contract address
-        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, _amountADesired).send({ from: accounts[0] });
-        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, _amountBDesired).send({ from: accounts[0] });
+        let transferred1 = await zrx.methods.transfer(UNIPOOLTOKEN_AS_A_GIFT_ADDRESS, _amountADesired).send({ from: accounts[0] });
+        let transferred2 = await bat.methods.transfer(UNIPOOLTOKEN_AS_A_GIFT_ADDRESS, _amountBDesired).send({ from: accounts[0] });
 
         /// Approve token0 and toke1 for pair address (as spender)
         let approved1 = await zrx.methods.approve(_pair, _amountADesired).send({ from: accounts[0] });
@@ -125,12 +125,12 @@ export default class UniswapAaveNYBW extends Component {
     }
 
     uniTokenAsGift = async () => {
-        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
+        const { accounts, web3, dai, zrx, bat, unipooltoken_as_a_gift, UNIPOOLTOKEN_AS_A_GIFT_ADDRESS } = this.state;
 
         /// Get pair contract address
         const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
         const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        const _pair = await unipooltoken_as_a_gift.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
         console.log('=== _pair() ===\n', _pair);
 
         const _recipient = walletAddressList["WalletAddress1"];
@@ -148,8 +148,8 @@ export default class UniswapAaveNYBW extends Component {
         console.log('=== uniswap_v2_erc20 ===', uniswap_v2_erc20);
 
         /// Approve and call uniTokenAsGift
-        let res1 = await uniswap_v2_erc20.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amount).send({ from: accounts[0] }); 
-        let res2 = await uniswap_aave_nybw.methods.uniTokenAsGift(_pair, _recipient, _amount).send({ from: accounts[0] });         
+        let res1 = await uniswap_v2_erc20.methods.approve(UNIPOOLTOKEN_AS_A_GIFT_ADDRESS, _amount).send({ from: accounts[0] }); 
+        let res2 = await unipooltoken_as_a_gift.methods.uniTokenAsGift(_pair, _recipient, _amount).send({ from: accounts[0] });         
         console.log('=== uniTokenAsGift() ===', res2);
     }
 
@@ -157,59 +157,59 @@ export default class UniswapAaveNYBW extends Component {
      * @notice - Getter function
      **/
     getPair = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+        const { accounts, web3, dai, unipooltoken_as_a_gift } = this.state;
 
         //const _tokenA = tokenAddressList["Ropsten"]["ETH"];
         //const _tokenB = tokenAddressList["Ropsten"]["USDCaave"];
         const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
         const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
-        let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
+        let res = await unipooltoken_as_a_gift.methods._getPair(_tokenA, _tokenB).call();
         console.log('=== _getPair() ===\n', res);
     }
 
     getUniToken = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+        const { accounts, web3, dai, unipooltoken_as_a_gift } = this.state;
 
         /// Get pair contract address
         const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
         const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        const _pair = await unipooltoken_as_a_gift.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
         //const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
         console.log('=== _pair() ===\n', _pair);
 
-        let res1 = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
+        let res1 = await unipooltoken_as_a_gift.methods.getUniToken(_pair).call();
         console.log('=== getUniToken() ===\n', res1);
 
-        let res2 = await uniswap_aave_nybw.methods.getUniPoolReserves(_pair).call();
+        let res2 = await unipooltoken_as_a_gift.methods.getUniPoolReserves(_pair).call();
         console.log('=== getUniPoolReserves() ===\n', res2);
     }
 
     _getTotalSupplyOfUniToken = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+        const { accounts, web3, dai, unipooltoken_as_a_gift } = this.state;
 
         /// Get pair contract address
         const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
         const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        const _pair = await unipooltoken_as_a_gift.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
         //const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
         console.log('=== _pair() ===\n', _pair);
 
-        let res = await uniswap_aave_nybw.methods.getTotalSupplyOfUniToken(_pair).call();
+        let res = await unipooltoken_as_a_gift.methods.getTotalSupplyOfUniToken(_pair).call();
         console.log('=== getTotalSupplyOfUniToken() ===\n', res);
     }
 
     _getLendingPoolManagerAddress = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+        const { accounts, web3, dai, unipooltoken_as_a_gift } = this.state;
 
-        let res = await uniswap_aave_nybw.methods.getLendingPoolManagerAddress().call();
+        let res = await unipooltoken_as_a_gift.methods.getLendingPoolManagerAddress().call();
         console.log('=== getLendingPoolManagerAddress() ===\n', res);
     }
 
     _balanceOfContract = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
+        const { accounts, web3, dai, unipooltoken_as_a_gift } = this.state;
 
-        let res1 = await uniswap_aave_nybw.methods.balanceOfContract().call();
+        let res1 = await unipooltoken_as_a_gift.methods.balanceOfContract().call();
         console.log('=== balanceOfContract() ===\n', res1);
     }
 
@@ -227,9 +227,9 @@ export default class UniswapAaveNYBW extends Component {
     //////////////////////////////////// 
     ///// Refresh Values
     ////////////////////////////////////
-    refreshValues = (instanceUniswapAaveNYBW) => {
-        if (instanceUniswapAaveNYBW) {
-          //console.log('refreshValues of instanceUniswapAaveNYBW');
+    refreshValues = (instanceUniPoolTokenAsAGift) => {
+        if (instanceUniPoolTokenAsAGift) {
+          //console.log('refreshValues of instanceUniPoolTokenAsAGift');
         }
     }
 
@@ -250,12 +250,12 @@ export default class UniswapAaveNYBW extends Component {
     componentDidMount = async () => {
         const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
      
-        let UniswapAaveNYBW = {};
+        let UniPoolTokenAsAGift = {};
         let Erc20 = {};
         let Dai = {};
         let BokkyPooBahsDateTimeContract = {};
         try {
-          UniswapAaveNYBW = require("../../../../build/contracts/StakeholderRegistry.json");  // Load artifact-file of StakeholderRegistry
+          UniPoolTokenAsAGift = require("../../../../build/contracts/UniPoolTokenAsAGift.json");
           Erc20 = require("../../../../build/contracts/IERC20.json");
           Dai = require("../../../../build/contracts/IERC20.json");
           BokkyPooBahsDateTimeContract = require("../../../../build/contracts/BokkyPooBahsDateTimeContract.json");   //@dev - BokkyPooBahsDateTimeContract.sol (for calculate timestamp)
@@ -286,17 +286,17 @@ export default class UniswapAaveNYBW extends Component {
             balance = web3.utils.fromWei(balance, 'ether');
 
             // Create instance of contracts
-            let instanceUniswapAaveNYBW = null;
+            let instanceUniPoolTokenAsAGift = null;
             let deployedNetwork = null;
-            let UNISWAP_AAVE_NYBW_ADDRESS = UniswapAaveNYBW.networks[networkId.toString()].address;
-            if (UniswapAaveNYBW.networks) {
-              deployedNetwork = UniswapAaveNYBW.networks[networkId.toString()];
+            let UNIPOOLTOKEN_AS_A_GIFT_ADDRESS = UniPoolTokenAsAGift.networks[networkId.toString()].address;
+            if (UniPoolTokenAsAGift.networks) {
+              deployedNetwork = UniPoolTokenAsAGift.networks[networkId.toString()];
               if (deployedNetwork) {
-                instanceUniswapAaveNYBW = new web3.eth.Contract(
-                  UniswapAaveNYBW.abi,
+                instanceUniPoolTokenAsAGift = new web3.eth.Contract(
+                  UniPoolTokenAsAGift.abi,
                   deployedNetwork && deployedNetwork.address,
                 );
-                console.log('=== instanceUniswapAaveNYBW ===', instanceUniswapAaveNYBW);
+                console.log('=== instanceUniPoolTokenAsAGift ===', instanceUniPoolTokenAsAGift);
               }
             }
 
@@ -340,7 +340,7 @@ export default class UniswapAaveNYBW extends Component {
             console.log('=== instanceBokkyPooBahsDateTimeContract ===', instanceBokkyPooBahsDateTimeContract);
 
 
-            if (UniswapAaveNYBW || Dai || BokkyPooBahsDateTimeContract) {
+            if (UniPoolTokenAsAGift || Dai || BokkyPooBahsDateTimeContract) {
               // Set web3, accounts, and contract to the state, and then proceed with an
               // example of interacting with the contract's methods.
               this.setState({ 
@@ -352,12 +352,12 @@ export default class UniswapAaveNYBW extends Component {
                 networkType, 
                 hotLoaderDisabled,
                 isMetaMask, 
-                uniswap_aave_nybw: instanceUniswapAaveNYBW,
+                unipooltoken_as_a_gift: instanceUniPoolTokenAsAGift,
                 dai: instanceDai,
                 zrx: instanceZRX,
                 bat: instanceBAT,
                 bokkypoobahs_datetime_contract: instanceBokkyPooBahsDateTimeContract,
-                UNISWAP_AAVE_NYBW_ADDRESS: UNISWAP_AAVE_NYBW_ADDRESS,
+                UNIPOOLTOKEN_AS_A_GIFT_ADDRESS : UNIPOOLTOKEN_AS_A_GIFT_ADDRESS,
                 UNISWAP_V2_ROUTOR_01_ADDRESS: UNISWAP_V2_ROUTOR_01_ADDRESS,
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
@@ -397,7 +397,7 @@ export default class UniswapAaveNYBW extends Component {
                               p={20} 
                               borderColor={"#E8E8E8"}
                         >
-                            <h4>Uniswap Aave NYBW Hack 2020</h4> <br />
+                            <h4>UniPoolToken as a Gift</h4> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.createUniToken}> Create UNItoken </Button> <br />
 

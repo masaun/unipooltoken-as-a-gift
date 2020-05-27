@@ -53,7 +53,7 @@ class App extends Component {
  
     let UniPoolTokenAsAGift = {};
     try {
-      StakeholderRegistry = require("../../build/contracts/StakeholderRegistry.json");          // Load artifact-file of StakeholderRegistry
+      UniPoolTokenAsAGift = require("../../build/contracts/UniPoolTokenAsAGift.json");          // Load artifact-file of UniPoolTokenAsAGift
     } catch (e) {
       console.log(e);
     }
@@ -84,18 +84,18 @@ class App extends Component {
         let deployedNetwork = null;
 
         // Create instance of contracts
-        if (StakeholderRegistry.networks) {
-          deployedNetwork = StakeholderRegistry.networks[networkId.toString()];
+        if (UniPoolTokenAsAGift.networks) {
+          deployedNetwork = UniPoolTokenAsAGift.networks[networkId.toString()];
           if (deployedNetwork) {
             instanceStakeholderRegistry = new web3.eth.Contract(
-              StakeholderRegistry.abi,
+              UniPoolTokenAsAGift.abi,
               deployedNetwork && deployedNetwork.address,
             );
-            console.log('=== instanceStakeholderRegistry ===', instanceStakeholderRegistry);
+            console.log('=== instanceUniPoolTokenAsAGift ===', instanceUniPoolTokenAsAGift);
           }
         }
 
-        if (StakeholderRegistry) {
+        if (UniPoolTokenAsAGift) {
           // Set web3, accounts, and contract to the state, and then proceed with an
           // example of interacting with the contract's methods.
           this.setState({ 
@@ -107,13 +107,13 @@ class App extends Component {
             networkType, 
             hotLoaderDisabled,
             isMetaMask, 
-            stakeholder_registry: instanceStakeholderRegistry
+            unipooltoken_as_a_gift: instanceUniPoolTokenAsAGift
           }, () => {
             this.refreshValues(
               instanceStakeholderRegistry
             );
             setInterval(() => {
-              this.refreshValues(instanceStakeholderRegistry);
+              this.refreshValues(instanceUniPoolTokenAsAGift);
             }, 5000);
           });
         }
@@ -136,9 +136,9 @@ class App extends Component {
     }
   }
 
-  refreshValues = (instanceStakeholderRegistry) => {
-    if (instanceStakeholderRegistry) {
-      console.log('refreshValues of instanceStakeholderRegistry');
+  refreshValues = (instanceUniPoolTokenAsAGift) => {
+    if (instanceUniPoolTokenAsAGift) {
+      console.log('refreshValues of instanceUniPoolTokenAsAGift');
     }
   }
 
