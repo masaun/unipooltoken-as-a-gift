@@ -165,6 +165,8 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         uniswapV2ERC20.transferFrom(msg.sender, address(this), _amount);
 
         /// Transfer DAI from contract to recipient
+        uint balance = uniswapV2ERC20.balanceOf(address(this));
+        require (balance > 0, "UniswapV2ERC20 / Insufficient balance");
         uniswapV2ERC20.approve(_recipient, _amount);
         uniswapV2ERC20.transferFrom(address(this), _recipient, _amount);        
     }
