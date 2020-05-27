@@ -112,7 +112,7 @@ export default class UniPoolTokenAsAGift extends Component {
         let approved2 = await bat.methods.approve(_pair, _amountBDesired).send({ from: accounts[0] });
 
         /// Add liquidity of UniToken
-        let res = await uniswap_aave_nybw.methods._addLiquidity(_tokenA,
+        let res = await unipooltoken_as_a_gift.methods._addLiquidity(_tokenA,
                                                                 _tokenB,
                                                                 _amountADesired,
                                                                 _amountBDesired,
@@ -362,10 +362,10 @@ export default class UniPoolTokenAsAGift extends Component {
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
                 this.refreshValues(
-                  instanceUniswapAaveNYBW
+                  instanceUniPoolTokenAsAGift
                 );
                 setInterval(() => {
-                  this.refreshValues(instanceUniswapAaveNYBW);
+                  this.refreshValues(instanceUniPoolTokenAsAGift);
                 }, 5000);
               });
             }
