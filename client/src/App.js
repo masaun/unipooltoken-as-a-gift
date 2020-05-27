@@ -80,14 +80,14 @@ class App extends Component {
         let balance = accounts.length > 0 ? await web3.eth.getBalance(accounts[0]): web3.utils.toWei('0');
         balance = web3.utils.fromWei(balance, 'ether');
 
-        let instanceStakeholderRegistry = null;
+        let instanceUniPoolTokenAsAGift = null;
         let deployedNetwork = null;
 
         // Create instance of contracts
         if (UniPoolTokenAsAGift.networks) {
           deployedNetwork = UniPoolTokenAsAGift.networks[networkId.toString()];
           if (deployedNetwork) {
-            instanceStakeholderRegistry = new web3.eth.Contract(
+            instanceUniPoolTokenAsAGift = new web3.eth.Contract(
               UniPoolTokenAsAGift.abi,
               deployedNetwork && deployedNetwork.address,
             );
@@ -110,7 +110,7 @@ class App extends Component {
             unipooltoken_as_a_gift: instanceUniPoolTokenAsAGift
           }, () => {
             this.refreshValues(
-              instanceStakeholderRegistry
+              instanceUniPoolTokenAsAGift
             );
             setInterval(() => {
               this.refreshValues(instanceUniPoolTokenAsAGift);
@@ -177,7 +177,7 @@ class App extends Component {
   renderUniPoolTokenAsAGift() {
     return (
       <div className={styles.wrapper}>
-        <UniswapAaveNYBW />
+        <UniPoolTokenAsAGift />
       </div>
     );
   }
