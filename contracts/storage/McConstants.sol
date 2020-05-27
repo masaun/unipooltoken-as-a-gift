@@ -1,7 +1,7 @@
 pragma solidity ^0.5.16;
 
 // Library
-import "../aave/libraries/EthAddressLib.sol";
+import "../lib/EthAddressLib.sol";
 
 
 /// @title Shared constants
