@@ -11,10 +11,6 @@ const zrxAddress = tokenAddressList["Ropsten"]["ZRX"];     // ZRX address on Rop
 const batAddress = tokenAddressList["Ropsten"]["BAT"];     // BAT address on Ropsten
 const _uniswapV2Factory = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Factory"];
 const _uniswapV2Router01 = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Router01"];
-const _lendingPool = contractAddressList["Ropsten"]["Aave"]["LendingPool"];
-const _lendingPoolCore = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
-const _lendingPoolAddressesProvider = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];
-const _aUSDC = tokenAddressList["Ropsten"]["aUSDC"];
 
 const depositedAmount = web3.utils.toWei("0.15");    // 0.15 DAI which is deposited in deployed contract. 
 
@@ -27,11 +23,7 @@ module.exports = async function(deployer, network, accounts) {
                           zrxAddress, 
                           batAddress, 
                           _uniswapV2Factory, 
-                          _uniswapV2Router01,
-                          _lendingPool,
-                          _lendingPoolCore,
-                          _lendingPoolAddressesProvider,
-                          _aUSDC)
+                          _uniswapV2Router01)
                   .then(async function(stakeholderRegistry) {
                       if(ownerAddress && ownerAddress!="") {
                           console.log(`=== Transfering ownership to address ${ownerAddress} ===`)

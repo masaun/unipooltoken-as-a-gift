@@ -33,9 +33,6 @@ export default class UniswapAaveNYBW extends Component {
         this.mintUniToken = this.mintUniToken.bind(this);
         this.uniTokenAsGift = this.uniTokenAsGift.bind(this);
 
-        /////// AAVE
-        this.depositToAaveMarket = this.depositToAaveMarket.bind(this);
-
         /////// Getter Functions of Uniswap-v2
         this.getPair = this.getPair.bind(this);
         this.getUniToken = this.getUniToken.bind(this);
@@ -156,27 +153,6 @@ export default class UniswapAaveNYBW extends Component {
         console.log('=== uniTokenAsGift() ===', res2);
     }
 
-
-
-    /***
-     * @notice - AAVE
-     **/
-    depositToAaveMarket = async () => {
-        const { accounts, web3, dai, uniswap_aave_nybw, lendingPool, lendingPoolCore, lendingPoolAddressesProvider, UNISWAP_AAVE_NYBW_ADDRESS, LENDINGPOOL, LENDINGPOOL_CORE, LENDINGPOOL_ADDRESS_PROVIDER } = this.state;
-
-        const _reserve = tokenAddressList["Ropsten"]["DAIaave"];
-        const _amount = web3.utils.toWei("1", "ether");
-        const _referralCode = 0;
-
-        /// activateReserve become true
-        let res1 = await dai.methods.approve(LENDINGPOOL, _amount).send({ from: accounts[0] });
-        let res2 = await dai.methods.approve(LENDINGPOOL_CORE, _amount).send({ from: accounts[0] });
-        let res3 = await lendingPool.methods.deposit(_reserve, _amount, _referralCode).send({ from: accounts[0] });
-        //let res4 = await uniswap_aave_nybw.methods.depositToAaveMarket(_reserve, _amount, _referralCode).send({ from: accounts[0] });
-        console.log('=== deposit() - AAVE ===\n', res3);
-        //console.log('=== depositToAaveMarket() ===\n', res4);
-    }
-
     /***
      * @notice - Getter function
      **/
@@ -277,18 +253,11 @@ export default class UniswapAaveNYBW extends Component {
         let UniswapAaveNYBW = {};
         let Erc20 = {};
         let Dai = {};
-        let LendingPool = {};
-        let LendingPoolCore = {};
-        let LendingPoolAddressesProvider = {};
         let BokkyPooBahsDateTimeContract = {};
         try {
           UniswapAaveNYBW = require("../../../../build/contracts/StakeholderRegistry.json");  // Load artifact-file of StakeholderRegistry
           Erc20 = require("../../../../build/contracts/IERC20.json");
           Dai = require("../../../../build/contracts/IERC20.json");
-          LendingPool = require("../../../../build/contracts/ILendingPool.json");
-          LendingPoolCore = require("../../../../build/contracts/ILendingPoolCore.json");
-          LendingPoolAddressesProvider = require("../../../../build/contracts/ILendingPoolAddressesProvider.json");
-          //LendingPoolAddressesProvider = require("../../../../build/contracts/LendingPoolAddressesProvider.json");
           BokkyPooBahsDateTimeContract = require("../../../../build/contracts/BokkyPooBahsDateTimeContract.json");   //@dev - BokkyPooBahsDateTimeContract.sol (for calculate timestamp)
         } catch (e) {
           console.log(e);
@@ -333,33 +302,6 @@ export default class UniswapAaveNYBW extends Component {
 
             //@notice - IUniswapV2Router01.sol
             const UNISWAP_V2_ROUTOR_01_ADDRESS = contractAddressList["Ropsten"]["Uniswap"]["UniswapV2Router01"];
-
-            //@notice - ILendingPool.sol
-            let instanceLendingPool = null;
-            let LENDINGPOOL = contractAddressList["Ropsten"]["Aave"]["LendingPool"];
-            instanceLendingPool = new web3.eth.Contract(
-              LendingPool.abi,
-              LENDINGPOOL,
-            );
-            console.log('=== instanceLendingPool ===', instanceLendingPool);
-
-            //@notice - ILendingPoolCore.sol
-            let instanceLendingPoolCore = null;
-            let LENDINGPOOL_CORE = contractAddressList["Ropsten"]["Aave"]["LendingPoolCore"];
-            instanceLendingPoolCore = new web3.eth.Contract(
-              LendingPoolCore.abi,
-              LENDINGPOOL_CORE,
-            );
-            console.log('=== instanceLendingPoolCore ===', instanceLendingPoolCore);            
-
-            //@notice - LendingPoolAddressesProvider.sol
-            let instanceLendingPoolAddressesProvider = null;
-            let LENDINGPOOL_ADDRESS_PROVIDER = contractAddressList["Ropsten"]["Aave"]["LendingPoolAddressesProvider"];
-            instanceLendingPoolAddressesProvider = new web3.eth.Contract(
-              LendingPoolAddressesProvider.abi,
-              LENDINGPOOL_ADDRESS_PROVIDER,
-            );
-            console.log('=== instanceLendingPoolAddressesProvider ===', instanceLendingPoolAddressesProvider);            
 
             //@dev - Create instance of DAI-contract
             let instanceDai = null;
@@ -411,18 +353,12 @@ export default class UniswapAaveNYBW extends Component {
                 hotLoaderDisabled,
                 isMetaMask, 
                 uniswap_aave_nybw: instanceUniswapAaveNYBW,
-                lendingPool: instanceLendingPool,
-                lendingPoolCore: instanceLendingPoolCore,
-                lendingPoolAddressesProvider: instanceLendingPoolAddressesProvider,
                 dai: instanceDai,
                 zrx: instanceZRX,
                 bat: instanceBAT,
                 bokkypoobahs_datetime_contract: instanceBokkyPooBahsDateTimeContract,
                 UNISWAP_AAVE_NYBW_ADDRESS: UNISWAP_AAVE_NYBW_ADDRESS,
                 UNISWAP_V2_ROUTOR_01_ADDRESS: UNISWAP_V2_ROUTOR_01_ADDRESS,
-                LENDINGPOOL: LENDINGPOOL,
-                LENDINGPOOL_CORE: LENDINGPOOL_CORE,
-                LENDINGPOOL_ADDRESS_PROVIDER: LENDINGPOOL_ADDRESS_PROVIDER,
                 DAI_ADDRESS: DAI_ADDRESS,
               }, () => {
                 this.refreshValues(
@@ -470,10 +406,6 @@ export default class UniswapAaveNYBW extends Component {
                             <Button size={'small'} mt={3} mb={2} onClick={this.addLiquidity}> Add Liquidity </Button> <br />
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.uniTokenAsGift}> UniToken As A Gift </Button> <br />
-
-                            <hr />
-
-                            <Button size={'small'} mt={3} mb={2} onClick={this.depositToAaveMarket}> Deposit To AaveMarket </Button> <br />
 
                             <hr />
 
