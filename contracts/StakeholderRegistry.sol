@@ -168,10 +168,8 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         uint balance = uniswapV2ERC20.balanceOf(address(this));
         require (balance > 0, "UniswapV2ERC20 / Insufficient balance");
         uniswapV2ERC20.approve(_recipient, _amount);
-        uniswapV2ERC20.transferFrom(address(this), _recipient, _amount);        
+        uniswapV2ERC20.transfer(_recipient, _amount);        
     }
-
-
 
 
     /***
