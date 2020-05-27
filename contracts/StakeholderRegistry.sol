@@ -82,8 +82,16 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
      * @notice - Uniswap-v2 / Create Pair (=Create UNItoken)
      **/
     function createUniToken(address _tokenA, address _tokenB) public {
+        /// Create UniToken Address (Pair Address)
         address _pair = uniswapV2Factory.createPair(_tokenA, _tokenB);
         emit _PairCreated(_tokenA, _tokenB, _pair);   
+    }
+
+    function mintUniToken(address _pair, address _to) public {
+        /// Mint UniToken
+        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
+        uint _liquidity = uniswapV2Pair.mint(_to);
+        emit MintUniToken(_pair, _to, _liquidity);
     }
 
     function _addLiquidity(
@@ -114,16 +122,55 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
                                                                           _amountBMin,
                                                                           _to,
                                                                           _deadline);
-        emit _AddLiquidity(_amountA, _amountB, _liquidity);
+        emit _AddLiquidity(_tokenA, _tokenB, _amountA, _amountB, _liquidity);
+    }
+
+    function syndicatedAddLiquidity(
+        address _userA,
+        address _userB,
+        address _tokenA,
+        address _tokenB,
+        uint _amountADesired,
+        uint _amountBDesired,
+        uint _amountAMin,
+        uint _amountBMin,
+        address _to
+        //uint _deadline
+    ) public returns (bool) {
+        uint _amountA; 
+        uint _amountB;
+        uint _liquidity;
+
+        /// Approve tokenA and tokenB for UniswapV2Router01.sol address
+        zrx.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountADesired);
+        bat.approve(UNISWAP_V2_ROUTOR_01_ADDRESS, _amountBDesired);
+
+        /// Add liquidity
+        uint _deadline = now + 30 days;
+        (_amountA, _amountB, _liquidity) = uniswapV2Router01.addLiquidity(_tokenA,
+                                                                          _tokenB,
+                                                                          _amountADesired,
+                                                                          _amountBDesired,
+                                                                          _amountAMin,
+                                                                          _amountBMin,
+                                                                          _to,
+                                                                          _deadline);
+        emit SyndicatedAddLiquidity(_userA, _userB, _tokenA, _tokenB, _amountA, _amountB, _liquidity);
     }
     
+    function uniTokenAsGift(address _pair, address _recipient, uint _amount) public returns (bool) {
+        IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);
 
-    function mintUniToken(address _pair, address _to) public {
-        /// Mint UniToken
-        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
-        uint _liquidity = uniswapV2Pair.mint(_to);
-        emit MintUniToken(_pair, _to, _liquidity);
+        /// Transfer DAI from msg.sender to contract
+        uniswapV2ERC20.transferFrom(msg.sender, address(this), _amount);
+
+        /// Transfer DAI from contract to recipient
+        uint balance = uniswapV2ERC20.balanceOf(address(this));
+        require (balance > 0, "UniswapV2ERC20 / Insufficient balance");
+        uniswapV2ERC20.approve(_recipient, _amount);
+        uniswapV2ERC20.transfer(_recipient, _amount);        
     }
+
 
     /***
      * @notice - AAVE
@@ -133,7 +180,6 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         IERC20(_reserve).approve(lendingPoolAddressesProvider.getLendingPoolCore(), _amount);
         lendingPool.deposit(_reserve, _amount, _referralCode);
     }
-
 
     /***
      * @notice - Uniswap-v2 / getter functions
@@ -164,9 +210,20 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         address _factory = uniswapV2Pair.factory();
         address _token0 = uniswapV2Pair.token0();
         address _token1 = uniswapV2Pair.token1();
-
-        return (_name, _symbol, _decimals, _factory, _token0, _token1);
     }
+
+    function getUniPoolReserves(address _pair) public view returns (uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast) {
+        /// Check reserve
+        IUniswapV2Pair uniswapV2Pair = IUniswapV2Pair(_pair);
+        uint112 reserve0; 
+        uint112 reserve1;
+        uint32 blockTimestampLast;
+        (reserve0, reserve1, blockTimestampLast) = uniswapV2Pair.getReserves();
+
+        return (reserve0, reserve1, blockTimestampLast);     
+    }
+    
+
 
     function getTotalSupplyOfUniToken(address _pair) public view returns (uint _totalSupplyOfUniToken) {
         IUniswapV2ERC20 uniswapV2ERC20 = IUniswapV2ERC20(_pair);

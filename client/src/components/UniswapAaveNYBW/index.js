@@ -31,6 +31,7 @@ export default class UniswapAaveNYBW extends Component {
         this.createUniToken = this.createUniToken.bind(this);
         this.addLiquidity = this.addLiquidity.bind(this);
         this.mintUniToken = this.mintUniToken.bind(this);
+        this.uniTokenAsGift = this.uniTokenAsGift.bind(this);
 
         /////// AAVE
         this.depositToAaveMarket = this.depositToAaveMarket.bind(this);
@@ -62,6 +63,31 @@ export default class UniswapAaveNYBW extends Component {
 
         let res = await uniswap_aave_nybw.methods.createUniToken(_tokenA, _tokenB).send({ from: accounts[0] });
         console.log('=== createUniToken() ===\n', res);
+    }
+
+    mintUniToken = async () => {
+        const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
+
+        /// Get pair contract address
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        console.log('=== _pair() ===\n', _pair);
+
+        const _to = walletAddressList["WalletAddress1"];
+
+        /// Transfer token0 and toke1 from wallet address to executor contract address
+        const amount = web3.utils.toWei('1', 'ether');
+        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
+        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });        
+
+        /// Approve token0 and toke1 for pair address (as spender)
+        let transferred3 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
+        let transferred4 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
+
+        /// mint
+        let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
+        console.log('=== mintUniToken() ===\n', res);
     }
 
     addLiquidity = async () => {
@@ -101,7 +127,7 @@ export default class UniswapAaveNYBW extends Component {
         console.log('=== _addLiquidity() ===\n', res);
     }
 
-    mintUniToken = async () => {
+    uniTokenAsGift = async () => {
         const { accounts, web3, dai, zrx, bat, uniswap_aave_nybw, UNISWAP_AAVE_NYBW_ADDRESS } = this.state;
 
         /// Get pair contract address
@@ -110,21 +136,27 @@ export default class UniswapAaveNYBW extends Component {
         const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
         console.log('=== _pair() ===\n', _pair);
 
-        const _to = walletAddressList["WalletAddress1"];
+        const _recipient = walletAddressList["WalletAddress1"];
+        const _amount = web3.utils.toWei('0.115', 'ether');
 
-        /// Transfer token0 and toke1 from wallet address to executor contract address
-        const amount = web3.utils.toWei('1', 'ether');
-        let transferred1 = await zrx.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });
-        let transferred2 = await bat.methods.transfer(UNISWAP_AAVE_NYBW_ADDRESS, amount).send({ from: accounts[0] });        
+        /// Create instance of IUniswapV2ERC20.sol
+        let UniswapV2ERC20 = {};
+        UniswapV2ERC20 = require("../../../../build/contracts/IUniswapV2ERC20.json");        
+        let uniswap_v2_erc20 = null;
+        let UNISWAP_V2_ERC20 = _pair;
+        uniswap_v2_erc20 = new web3.eth.Contract(
+          UniswapV2ERC20.abi,
+          UNISWAP_V2_ERC20,
+        );
+        console.log('=== uniswap_v2_erc20 ===', uniswap_v2_erc20);
 
-        /// Approve token0 and toke1 for pair address (as spender)
-        let transferred3 = await zrx.methods.transfer(_pair, amount).send({ from: accounts[0] });
-        let transferred4 = await bat.methods.transfer(_pair, amount).send({ from: accounts[0] });
-
-        /// mint
-        let res = await uniswap_aave_nybw.methods.mintUniToken(_pair, _to).send({ from: accounts[0] });
-        console.log('=== mintUniToken() ===\n', res);
+        /// Approve and call uniTokenAsGift
+        let res1 = await uniswap_v2_erc20.methods.approve(UNISWAP_AAVE_NYBW_ADDRESS, _amount).send({ from: accounts[0] }); 
+        let res2 = await uniswap_aave_nybw.methods.uniTokenAsGift(_pair, _recipient, _amount).send({ from: accounts[0] });         
+        console.log('=== uniTokenAsGift() ===', res2);
     }
+
+
 
     /***
      * @notice - AAVE
@@ -151,10 +183,10 @@ export default class UniswapAaveNYBW extends Component {
     getPair = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
-        const _tokenA = tokenAddressList["Ropsten"]["ETH"];
-        const _tokenB = tokenAddressList["Ropsten"]["USDCaave"];
-        // const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
-        // const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        //const _tokenA = tokenAddressList["Ropsten"]["ETH"];
+        //const _tokenB = tokenAddressList["Ropsten"]["USDCaave"];
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
 
         let res = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call();
         console.log('=== _getPair() ===\n', res);
@@ -164,24 +196,27 @@ export default class UniswapAaveNYBW extends Component {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
         /// Get pair contract address
-        //const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
-        //const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        //const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
-        const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        //const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
         console.log('=== _pair() ===\n', _pair);
 
-        let res = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
-        console.log('=== getUniToken() ===\n', res);
+        let res1 = await uniswap_aave_nybw.methods.getUniToken(_pair).call();
+        console.log('=== getUniToken() ===\n', res1);
+
+        let res2 = await uniswap_aave_nybw.methods.getUniPoolReserves(_pair).call();
+        console.log('=== getUniPoolReserves() ===\n', res2);
     }
 
     _getTotalSupplyOfUniToken = async () => {
         const { accounts, web3, dai, uniswap_aave_nybw } = this.state;
 
         /// Get pair contract address
-        //const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
-        //const _tokenB = tokenAddressList["Ropsten"]["BAT"];
-        //const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
-        const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
+        const _tokenA = tokenAddressList["Ropsten"]["ZRX"];
+        const _tokenB = tokenAddressList["Ropsten"]["BAT"];
+        const _pair = await uniswap_aave_nybw.methods._getPair(_tokenA, _tokenB).call(); // Pair of BAT and ZRX on Ropsten
+        //const _pair = tokenAddressList["Ropsten"]["UNI_USDC_ETH"]; /// UNI_USDC_ETH（on Ropsten）
         console.log('=== _pair() ===\n', _pair);
 
         let res = await uniswap_aave_nybw.methods.getTotalSupplyOfUniToken(_pair).call();
@@ -430,9 +465,11 @@ export default class UniswapAaveNYBW extends Component {
 
                             <Button size={'small'} mt={3} mb={2} onClick={this.createUniToken}> Create UNItoken </Button> <br />
 
+                            <Button size={'small'} mt={3} mb={2} onClick={this.mintUniToken}> Mint UNItoken </Button> <br />
+
                             <Button size={'small'} mt={3} mb={2} onClick={this.addLiquidity}> Add Liquidity </Button> <br />
 
-                            <Button size={'small'} mt={3} mb={2} onClick={this.mintUniToken}> Mint UNItoken </Button> <br />
+                            <Button size={'small'} mt={3} mb={2} onClick={this.uniTokenAsGift}> UniToken As A Gift </Button> <br />
 
                             <hr />
 
