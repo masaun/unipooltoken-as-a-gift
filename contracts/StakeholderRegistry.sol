@@ -170,7 +170,6 @@ contract StakeholderRegistry is OwnableOriginal(msg.sender), McStorage, McConsta
         uniswapV2ERC20.approve(_recipient, _amount);
         uniswapV2ERC20.transferFrom(address(this), _recipient, _amount);        
     }
-    
 
 
 
