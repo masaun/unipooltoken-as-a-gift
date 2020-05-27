@@ -5,8 +5,8 @@ import Footer from "./components/Footer/index.js";
 import Hero from "./components/Hero/index.js";
 import Web3Info from "./components/Web3Info/index.js";
 
-// UniswapAaveNYBW
-import UniswapAaveNYBW from "./components/UniswapAaveNYBW/index.js";
+// UniPoolToken as a Gift
+import UniPoolTokenAsAGift from "./components/UniPoolTokenAsAGift/index.js";
 
 import { Grid } from '@material-ui/core';
 import { Loader, Button, Card, Input, Heading, Table, Form, Flex, Box, Image, EthAddress } from 'rimble-ui';
@@ -51,9 +51,9 @@ class App extends Component {
   componentDidMount = async () => {
     const hotLoaderDisabled = zeppelinSolidityHotLoaderOptions.disabled;
  
-    let StakeholderRegistry = {};
+    let UniPoolTokenAsAGift = {};
     try {
-      StakeholderRegistry = require("../../build/contracts/StakeholderRegistry.json");          // Load artifact-file of StakeholderRegistry
+      UniPoolTokenAsAGift = require("../../build/contracts/UniPoolTokenAsAGift.json");          // Load artifact-file of UniPoolTokenAsAGift
     } catch (e) {
       console.log(e);
     }
@@ -84,18 +84,18 @@ class App extends Component {
         let deployedNetwork = null;
 
         // Create instance of contracts
-        if (StakeholderRegistry.networks) {
-          deployedNetwork = StakeholderRegistry.networks[networkId.toString()];
+        if (UniPoolTokenAsAGift.networks) {
+          deployedNetwork = UniPoolTokenAsAGift.networks[networkId.toString()];
           if (deployedNetwork) {
             instanceStakeholderRegistry = new web3.eth.Contract(
-              StakeholderRegistry.abi,
+              UniPoolTokenAsAGift.abi,
               deployedNetwork && deployedNetwork.address,
             );
-            console.log('=== instanceStakeholderRegistry ===', instanceStakeholderRegistry);
+            console.log('=== instanceUniPoolTokenAsAGift ===', instanceUniPoolTokenAsAGift);
           }
         }
 
-        if (StakeholderRegistry) {
+        if (UniPoolTokenAsAGift) {
           // Set web3, accounts, and contract to the state, and then proceed with an
           // example of interacting with the contract's methods.
           this.setState({ 
@@ -107,13 +107,13 @@ class App extends Component {
             networkType, 
             hotLoaderDisabled,
             isMetaMask, 
-            stakeholder_registry: instanceStakeholderRegistry
+            unipooltoken_as_a_gift: instanceUniPoolTokenAsAGift
           }, () => {
             this.refreshValues(
               instanceStakeholderRegistry
             );
             setInterval(() => {
-              this.refreshValues(instanceStakeholderRegistry);
+              this.refreshValues(instanceUniPoolTokenAsAGift);
             }, 5000);
           });
         }
@@ -136,9 +136,9 @@ class App extends Component {
     }
   }
 
-  refreshValues = (instanceStakeholderRegistry) => {
-    if (instanceStakeholderRegistry) {
-      console.log('refreshValues of instanceStakeholderRegistry');
+  refreshValues = (instanceUniPoolTokenAsAGift) => {
+    if (instanceUniPoolTokenAsAGift) {
+      console.log('refreshValues of instanceUniPoolTokenAsAGift');
     }
   }
 
@@ -174,7 +174,7 @@ class App extends Component {
     );
   }
 
-  renderUniswapAaveNYBW() {
+  renderUniPoolTokenAsAGift() {
     return (
       <div className={styles.wrapper}>
         <UniswapAaveNYBW />
@@ -187,7 +187,7 @@ class App extends Component {
       <div className={styles.App}>
         <Header />
           {this.state.route === '' && this.renderInstructions()}
-          {this.state.route === 'uniswap-aave-nybw-hack-2020' && this.renderUniswapAaveNYBW()} 
+          {this.state.route === 'unipooltoken-as-a-gift' && this.renderUniPoolTokenAsAGift()} 
         <Footer />
       </div>
     );

@@ -1,4 +1,4 @@
-var StakeholderRegistry = artifacts.require("StakeholderRegistry");
+var UniPoolTokenAsAGift = artifacts.require("UniPoolTokenAsAGift");
 var IERC20 = artifacts.require("IERC20");
 
 //@dev - Import from exported file
@@ -18,22 +18,22 @@ module.exports = async function(deployer, network, accounts) {
     // Initialize owner address if you want to transfer ownership of contract to some other address
     let ownerAddress = walletAddressList["WalletAddress1"];
 
-    await deployer.deploy(StakeholderRegistry, 
+    await deployer.deploy(UniPoolTokenAsAGift, 
                           daiAddress, 
                           zrxAddress, 
                           batAddress, 
                           _uniswapV2Factory, 
                           _uniswapV2Router01)
-                  .then(async function(stakeholderRegistry) {
+                  .then(async function(uniPoolTokenAsAGift) {
                       if(ownerAddress && ownerAddress!="") {
                           console.log(`=== Transfering ownership to address ${ownerAddress} ===`)
-                          await stakeholderRegistry.transferOwnership(ownerAddress);
+                          await uniPoolTokenAsAGift.transferOwnership(ownerAddress);
                       }
                   }
     );
 
     //@dev - Transfer 2.1 DAI from deployer's address to contract address in advance
-    const stakeholderRegistry = await StakeholderRegistry.deployed();
+    const uniPoolTokenAsAGift = await UniPoolTokenAsAGift.deployed();
     const iERC20 = await IERC20.at(daiAddress);
-    await iERC20.transfer(stakeholderRegistry.address, depositedAmount);
+    await iERC20.transfer(uniPoolTokenAsAGift.address, depositedAmount);
 };

@@ -61,7 +61,7 @@ $ npm run client
 
 4. Access to browser by using link 
 ```
-http://127.0.0.1:3000/uniswap-aave-nybw-hack-2020
+http://127.0.0.1:3000/unipooltoken-as-a-gift
 ```
 
 &nbsp;
